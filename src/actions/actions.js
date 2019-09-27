@@ -1,7 +1,8 @@
-export const setParameter = (parameter, value) =>(
+export const setParam = (module, param, value) =>(
     {
-        type: 'SET_PARAMETER',
+        type: 'SET_PARAM',
         value,
-        parameter
+        module,
+        param
     }
 )

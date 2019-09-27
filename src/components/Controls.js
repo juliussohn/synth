@@ -1,10 +1,14 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { connect } from 'react-redux';
-
-
-
 import KnobControl from '../components/KnobControl'
+
+const Row = styled.div`
+ display:flex;
+`;
+
+
 
 class Controls extends React.Component {
     constructor(props) {
@@ -16,9 +20,11 @@ class Controls extends React.Component {
     render() {
         return (
             <div className="Controls">
-                {this.props.pitch}
-                <KnobControl label={"Pitch"} param={'pitch'} min={100} max={1000} value={this.props.pitch}></KnobControl>
-                <KnobControl label={"Filter"}  param={'filter'} min={0} max={5000} value={this.props.filter}></KnobControl>
+                <Row>
+                <KnobControl label={"Osc 1 Pitch"} module={'vco1'} param={'pitch'} min={20} max={1000} value={this.props.vco1.pitch}></KnobControl>
+                <KnobControl label={"Filter Freq"} module={'filter'} param={'frequency'} min={0} max={5000} value={this.props.filter.frequency}></KnobControl>
+                <KnobControl label={"Filter Reso"} module={'filter'} param={'resonance'} min={0} max={100} value={this.props.filter.resonance}></KnobControl>
+                </Row> 
             </div>
         );
     }
@@ -28,7 +34,7 @@ const mapStateToProps = (state) => {
     console.log(state)
 
     return {
-        ...state.state.parameters
+        ...state.state
     }
 }
 /*

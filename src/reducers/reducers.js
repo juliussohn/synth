@@ -1,20 +1,27 @@
 let defaultState = {
-    parameters:{
-        power:true,
+    power:{
+        active:true
+    },
+    vco1: {
         pitch: 150,
-        filter: 900,
-    }
-   
+        type: 'sawtooth'
+    },
+    power: true,
+    filter: {
+        frequency:900,
+        resonance:1
+    },
+
 }
 
-const reducers = (state = defaultState, action) =>{
+const reducers = (state = defaultState, action) => {
     switch (action.type) {
-        case 'SET_PARAMETER':
+        case 'SET_PARAM':
             return {
                 ...state,
-                parameters:{
-                    ...state.parameters,
-                    [action.parameter]: action.value
+                [action.module]: {
+                    ...state[action.module],
+                    [action.param]: action.value
                 }
             }
         default: return state

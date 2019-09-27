@@ -8,27 +8,30 @@ class AudioEngine extends React.Component {
        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
        // create Oscillator node
-       this.oscillator = this.audioCtx.createOscillator();
-       this.oscillator.type = 'square';
-       this.oscillator.frequency.setValueAtTime(props.pitch, this.audioCtx.currentTime); // value in hertz
+       this.vco1 = this.audioCtx.createOscillator();
+       this.vco1.type = 'square';
+       this.vco1.frequency.setValueAtTime(props.vco1.pitch, this.audioCtx.currentTime); // value in hertz
 
        this.biquadFilter = this.audioCtx.createBiquadFilter();
        this.biquadFilter.type = "lowpass";
-       this.biquadFilter.frequency.setValueAtTime(props.filter, this.audioCtx.currentTime);
-       this.biquadFilter.gain.setValueAtTime(25, this.audioCtx.currentTime);
+       this.biquadFilter.frequency.value = props.filter.frequency
+       this.biquadFilter.gain.value = 0;
+       this.biquadFilter.Q.value = props.filter.resonance;
 
 
-       this.oscillator.connect( this.biquadFilter);
+       this.vco1.connect( this.biquadFilter);
        this.biquadFilter.connect(this.audioCtx.destination);
 
 
-       this.oscillator.start(0);
+       this.vco1.start(0);
 
     }
 
     componentWillReceiveProps(nextProps){
-        this.oscillator.frequency.setValueAtTime(nextProps.pitch, this.audioCtx.currentTime); // value in hertz
-        this.biquadFilter.frequency.setValueAtTime(nextProps.filter, this.audioCtx.currentTime); // value in hertz
+        const ctx = this.audioCtx;
+        this.vco1.frequency.setValueAtTime(nextProps.vco1.pitch, ctx.currentTime); // value in hertz
+        this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime); // value in hertz
+        this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime); // value in hertz
 
     }
 
@@ -38,14 +41,14 @@ class AudioEngine extends React.Component {
     }
 
     render() {
-        return <div>sound</div>;
+        return <div></div>;
     }
 
 }
 
 const mapStateToProps = (state) => {
     return {
-        ...state.state.parameters
+        ...state.state
     }
 }
 

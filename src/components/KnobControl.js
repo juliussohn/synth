@@ -2,19 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
-import { setParameter } from '../actions/actions.js';
+import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
 
 const Container = styled.div`
  border:1px solid black;
-
 `;
 
 const Inner = styled.div`
  padding:20px;
  display:flex;
  align-items:center;
- justify-content:center
+ justify-content:center;
 `;
 
 const Label = styled.div`
@@ -64,8 +63,8 @@ class KnobControl extends React.Component {
   }
 
   getRotation(value) {
-    const { min, max } = this.props;
-    return ((value-min) / (max - min) ) * 360 ;
+    const { min, max, minDeg, maxDeg } = this.props;
+    return minDeg + ((value - min) / (max - min)) * (maxDeg-minDeg);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,7 +79,6 @@ class KnobControl extends React.Component {
       dragging: true,
       freezeValue: this.props.value
     })
-    console.log(event.clientY)
   }
 
   onMouseUp(event) {
@@ -91,16 +89,20 @@ class KnobControl extends React.Component {
 
   onMouseMove(event) {
     if (!this.state.dragging) return
-    const { min, max,param } = this.props;
-    const totalDelta = (max-min)
+
+    const { min, max, param, module } = this.props;
+    const totalDelta = (max - min)
     const delta = this.state.dragStartY - event.clientY
-   let newValue = this.state.freezeValue + (delta * (totalDelta/100));
+   
+    const increment = event.shiftKey ? 400 : 100 
+    //console.log(event.shiftKey)
+    let newValue = this.state.freezeValue + (delta * (totalDelta / increment));
     //let newValue = this.state.freezeValue + (delta);
 
     if (newValue > max) newValue = max
     else if (newValue < min) { newValue = min }
 
-    this.props.setParameter(param, newValue)
+    this.props.setParam(module, param, newValue)
   }
 
 
@@ -110,10 +112,12 @@ class KnobControl extends React.Component {
       <Container>
         <Label>{this.props.label}</Label>
         <Inner>
-        <Knob onMouseDown={this.onMouseDown.bind(this)} style={{ transform: `rotate(${this.state.rotate}deg)` }}>
-          <Pointer></Pointer>
-        </Knob>
+          <Knob onMouseDown={this.onMouseDown.bind(this)} style={{ transform: `rotate(${this.state.rotate}deg)` }}>
+            <Pointer></Pointer>
+          </Knob>
         </Inner>
+        {Math.round(this.props.value)}
+
       </Container>
     );
   }
@@ -122,12 +126,14 @@ class KnobControl extends React.Component {
 KnobControl.defaultProps = {
   min: 0,
   max: 100,
+  minDeg:40,
+  maxDeg:320,
   value: 50,
   label: 'Pitch',
-  param:'pitch'
+  param: 'pitch'
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ setParameter }, dispatch)
+  return bindActionCreators({ setParam }, dispatch)
 }
 export default connect(null, mapDispatchToProps)(KnobControl);
