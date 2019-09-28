@@ -89,7 +89,8 @@ padding:5px 0;
   background-image: linear-gradient(180deg, #1C1C1C 0%, #4D4D4D 99%);
   box-shadow: 0 5px 3px 0 rgba(0,0,0,0.19), 0 8px 7px 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(0,0,0,0.50), inset 0 1px 0 0 rgba(255,255,255,0.16);
   border-radius: 5px;
-z-index:5;x
+z-index:5;
+cursor:pointer;
 
 }
 `
