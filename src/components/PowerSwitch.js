@@ -5,6 +5,7 @@ import { setPower } from '../actions/actions.js';
 
 import { connect } from 'react-redux';
 import { directive } from '@babel/types';
+import Label from './Label'
 
 
 const options = [
@@ -14,28 +15,56 @@ const options = [
     'square'
 ]
 
+const Container = styled.div`
+    display:flex;
+    margin-bottom:20px;
+`
+const Track = styled.div`
+    box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(255,255,255,0.16);
+    border-radius: 15px;
+    height:24px;
+    width:48px;
+    overflow:auto;
+    cursor:pointer;
+    transition: all .2s;
+    margin-left:8px;
+`
+
+const Knob = styled.div`
+height:20px;
+width:20px;
+border-radius:100%;
+margin:2px;
+transition: all .3s;
+
+background-image: linear-gradient(180deg, #4D4D4D 0%, #393939 42%, #1C1C1C 99%);
+box-shadow: 0 5px 3px 0 rgba(0,0,0,0.19), 0 8px 7px 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(0,0,0,0.50), inset 0 1px 0 0 rgba(255,255,255,0.16);
+`
+
 class PowerSwitch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
 
         }
-        
+
     }
-    toggle(e){ 
-        
-        const {   module } = this.props;
-        this.props.setPower(e.target.checked)
+    toggle() {
+
+        const { module,value } = this.props;
+        this.props.setPower(!value)
 
     }
     render() {
-        const {value} = this.props
+        const { value } = this.props
         return (
-            <div>
-            <label for="power"><input id="power" name="power" checked={value} onChange={this.toggle.bind(this)} type="checkbox"/> Power</label>
-            </div>
+            <Container >
+                <Label style={{textAlign:'left'}}>Power</Label>
+                <Track style={{background: value ? '#aaa':'#111'}} onClick={this.toggle.bind(this)} active={value}>
+                    <Knob style={{marginLeft: value ? 22:2}}></Knob></Track>
+            </Container>
         );
-    }
+    }   
 
 }
 
@@ -46,6 +75,6 @@ PowerSwitch.defaultProps = {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ setPower }, dispatch)
+    return bindActionCreators({ setPower }, dispatch)
 }
 export default connect(null, mapDispatchToProps)(PowerSwitch);
