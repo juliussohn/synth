@@ -27,6 +27,9 @@ padding:10px;
  cursor:pointer;
  font-size:12px;
  font-weight:bold;
+  * {
+ stroke:${props => props.active ? '#222' : 'white'};
+ }
 `;
 
 class WaveformSelector extends React.Component {
@@ -45,10 +48,47 @@ class WaveformSelector extends React.Component {
         const { value } = this.props
         return (
             <div>
-                {options.map(o => {
-                    return <Select active={o == value} onClick={() => { this.select(o) }}>{o}</Select>
-                })}
-            </div>
+                <Select active={value == 'sine'} onClick={() => { this.select('sine') }}>
+
+                    <svg width="34px" height="18px" viewBox="0 0 34 18" version="1.1"  >
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+                            <g id="Group-3" transform="translate(1.000000, 1.000000)"  stroke-width="2">
+                                <path d="M16,8 C16,3.581722 12.4181687,0 7.99992957,0 C3.58169047,0 0,3.581722 0,8" id="Path"></path>
+                                <path d="M32,8 C32,12.418278 28.4181687,16 23.9999296,16 C19.5816905,16 16,12.418278 16,8" id="Path"></path>
+                            </g>
+                        </g>
+                    </svg>
+                </Select>
+
+                <Select active={value == 'triangle'} onClick={() => { this.select('triangle') }}>
+                    <svg width="34px" height="18px" viewBox="0 0 34 18" version="1.1"  >
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline id="Path-4"  stroke-width="2" points="1 17 17 1 33 17"></polyline>
+                        </g>
+                    </svg>
+                </Select>
+
+                <Select active={value == 'sawtooth'} onClick={() => { this.select('sawtooth') }}>
+
+                    <svg width="38px" height="20px" viewBox="0 0 38 20" version="1.1"  >
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline id="Path-5-Copy"  stroke-width="2" points="1 19 1 1 19 1 19 19 37 19"></polyline>
+                        </g>
+                    </svg>
+                </Select>
+                <Select active={value == 'square'} onClick={() => { this.select('square') }}>
+
+                    <svg width="38px" height="20px" viewBox="0 0 38 20" version="1.1" >
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline id="Path-7"  stroke-width="2" points="1 19 37 1 37 19"></polyline>
+                        </g>
+                    </svg>
+                </Select>
+
+
+
+                
+            </div >
         );
     }
 

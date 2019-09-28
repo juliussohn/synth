@@ -7,8 +7,7 @@ function App() {
   return (
   
 
-      <div className="App" style={{ minHeight:'100vh', padding:100}}>
-        <h1>Tender Roentgen</h1>
+      <div className="App" >
       <AudioEngine></AudioEngine>
         <Controls></Controls>
       </div>
