@@ -12,7 +12,47 @@ let defaultState = {
         {
             pitch: 150,
             type: 'sawtooth',
-            gain:1
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
+        },
+        {
+            pitch: 150,
+            type: 'sawtooth',
+            gain:0
         }
     ],
     filter: {

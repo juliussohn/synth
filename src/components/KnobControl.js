@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
 import { motion ,transform} from "framer-motion"
+import Label from './Label'
 
 const Container = styled.div`
 `;
@@ -16,13 +17,7 @@ const Inner = styled.div`
  justify-content:center;
 `;
 
-const Label = styled.div`
- color:white;
- padding:4px;
- text-align:center;
- text-transform:uppercase;
- font-size:12px;
-`;
+
 const KnobInner = styled.div`
   height:100%;
   width:100%;

@@ -4,11 +4,18 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PowerSwitch from '../components/PowerSwitch'
 import KnobControl from '../components/KnobControl'
+import FaderControl from '../components/FaderControl'
 import WaveformSelector from '../components/WaveformSelector'
 
 const Row = styled.div`
  display:flex;
  text-align:center;
+`;
+
+
+const Module = styled.div`
+ text-align:center;
+ margin-right:30px;
 `;
 
 
@@ -29,26 +36,28 @@ class Controls extends React.Component {
                 <PowerSwitch module={'power'} value={props.power.active} />
                 <Row>
                     {props.vco.map((vco, i) => {
-                        return <div key={`vco_${i}`}>
+                        return( <Module key={`vco_${i}`}>
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
                             <KnobControl key={`vco_pitch_${i}`} label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={i} param={'pitch'} min={20} max={1000} value={props.vco[i].pitch}></KnobControl>
-                            <KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>
+                            {/*<KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>*/}
+                            <FaderControl key={`vco_gain2_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></FaderControl>
 
                             <WaveformSelector key={`vco_shape_${i}`} label={"Type"} module={'vco'} moduleIndex={i} param={'type'} value={props.vco[i].type}></WaveformSelector>
-
-                        </div>
+                        </Module>
+                        )
                     })}
 
-                    <div>
+                    <Module>
+
                         <h2>FILTER</h2>
                         <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
                         <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
 
-                    </div>
-                    <div>
+                    </Module>
+                    <Module>
                         <h2>AMP</h2>
                         <KnobControl label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
-                    </div>
+                    </Module>
                 </Row>
             </div>
         );
