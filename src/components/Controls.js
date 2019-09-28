@@ -18,6 +18,9 @@ const Module = styled.div`
  padding-right:30px;
  padding-left:30px;
  border-right:1px solid grey;
+ &:first-child{
+    padding-left:0;
+ }
 `;
 
 
@@ -47,6 +50,7 @@ class Controls extends React.Component {
                       
                         <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
                         <hr/>
+                        <br/>
                         <br/>
 
                         <PowerSwitch module={'power'} value={props.power.active} />
