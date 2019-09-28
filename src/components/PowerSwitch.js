@@ -32,7 +32,7 @@ class PowerSwitch extends React.Component {
         const {value} = this.props
         return (
             <div>
-            <input checked={value} onChange={this.toggle.bind(this)} type="checkbox"/> Power
+            <label for="power"><input id="power" name="power" checked={value} onChange={this.toggle.bind(this)} type="checkbox"/> Power</label>
             </div>
         );
     }

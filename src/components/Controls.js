@@ -15,7 +15,9 @@ const Row = styled.div`
 
 const Module = styled.div`
  text-align:center;
- margin-right:30px;
+ padding-right:30px;
+ padding-left:30px;
+ border-right:1px solid grey;
 `;
 
 
@@ -35,6 +37,14 @@ class Controls extends React.Component {
             <div className="Controls">
                 <PowerSwitch module={'power'} value={props.power.active} />
                 <Row>
+                <Module>
+                    <h2>AMP</h2>
+                        <KnobControl label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
+                        <h2>FILTER</h2>
+                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
+                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
+                     
+                    </Module>
                     {props.vco.map((vco, i) => {
                         return( <Module key={`vco_${i}`}>
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
@@ -47,14 +57,7 @@ class Controls extends React.Component {
                         )
                     })}
 
-                    <Module>
-                    <h2>AMP</h2>
-                        <KnobControl label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
-                        <h2>FILTER</h2>
-                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
-                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
-                     
-                    </Module>
+                 
                   
                 </Row>
             </div>
