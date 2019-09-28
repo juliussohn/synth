@@ -17,11 +17,11 @@ const options = [
 
 
 const Select = styled.div`
-padding:10px;
+padding:15px 10px ;
  background-color: ${props => props.active ? '#ccc' : '#222'};
  color: ${props => props.active ? '#222' : 'white'};
  text-align:center;
- margin-bottom:8px;
+ margin-bottom:12px;
  border-radius:4px;
  text-transform:uppercase;
  cursor:pointer;
@@ -48,6 +48,7 @@ class WaveformSelector extends React.Component {
         const { value } = this.props
         return (
             <div>
+                <br/>
                 <Select active={value == 'sine'} onClick={() => { this.select('sine') }}>
 
                     <svg width="34px" height="18px" viewBox="0 0 34 18" version="1.1"  >
