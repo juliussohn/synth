@@ -7,3 +7,10 @@ export const setParam = (module, moduleIndex, param, value) =>(
         param
     }
 )
+
+export const setPower = (active) =>(
+    {
+        type: 'SET_POWER',
+        active
+    }
+)

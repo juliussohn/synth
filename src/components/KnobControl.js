@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
-import { motion } from "framer-motion"
+import { motion ,transform} from "framer-motion"
 
 const Container = styled.div`
 `;
@@ -32,8 +32,8 @@ const KnobInner = styled.div`
 `
 const KnobBase = styled.div`
   cursor: pointer;
-  height:80px;
-  width:80px;
+  height:${props => props.size}px;
+  width:${props => props.size}px;
   border-radius:100%;
   background-image: linear-gradient(180deg, #4D4D4D 0%, #1C1C1C 99%);
   box-shadow: 0 5px 6px 0 rgba(0,0,0,0.18), 0 22px 22px 0 rgba(0,0,0,0.39), inset 0 -1px 0 0 rgba(0,0,0,0.50), inset 0 1px 0 0 rgba(255,255,255,0.16);
@@ -74,6 +74,8 @@ class KnobControl extends React.Component {
       rotate: this.getRotation(props.value),
       dragging: false
     }
+    this.defaultValue = props.value
+
   }
 
   componentDidMount() {
@@ -114,12 +116,13 @@ class KnobControl extends React.Component {
     if (!this.state.dragging) return
 
     const { min, max, param, module, moduleIndex } = this.props;
-    const totalDelta = (max - min)
-    const delta = this.state.dragStartY - event.clientY
 
+
+    const delta = this.state.dragStartY - event.clientY
+    const totalDelta = (max - min)
     const increment = event.shiftKey ? 400 : 100
+
     let newValue = this.state.freezeValue + (delta * (totalDelta / increment));
-    //let newValue = this.state.freezeValue + (delta);
 
     if (newValue > max) newValue = max
     else if (newValue < min) { newValue = min }
@@ -127,14 +130,21 @@ class KnobControl extends React.Component {
     this.props.setParam(module, moduleIndex, param, newValue)
   }
 
+  onDoubleClick(e){
+    const { param, module, moduleIndex } = this.props;
+
+    this.props.setParam(module, moduleIndex, param, this.defaultValue)
+
+  }
+
 
   render() {
-
+    /* map va;l sto size: transform(this.props.value, [this.props.min, this.props.max],[40,200])*/
     return (
       <Container>
         <Label>{this.props.label}</Label>
         <Inner>
-          <KnobBase onMouseDown={this.onMouseDown.bind(this)} >
+          <KnobBase size={this.props.size} onDoubleClick={this.onDoubleClick.bind(this)} onMouseDown={this.onMouseDown.bind(this)} >
             <KnobInner style={{ transform: `rotate(${this.state.rotate}deg)` }}>
               <Pointer style={{ transform: `rotate(-${this.state.rotate}deg)` }}></Pointer>
             </KnobInner>
@@ -168,7 +178,8 @@ KnobControl.defaultProps = {
   label: 'Pitch',
   param: 'pitch',
   unit: '',
-  moduleIndex: false
+  moduleIndex: false,
+  size:80
 }
 
 const mapDispatchToProps = (dispatch) => {

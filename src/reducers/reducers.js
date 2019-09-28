@@ -1,22 +1,27 @@
 let defaultState = {
     power: {
-        active: true
+        active: false
     },
+
     vco: [
         {
             pitch: 150,
-            type: 'sawtooth'
+            type: 'sawtooth',
+            gain:1
         },
         {
             pitch: 150,
-            type: 'sawtooth'
-        },
+            type: 'sawtooth',
+            gain:1
+        }
     ],
-    power: true,
     filter: {
         frequency: 900,
         resonance: 1
     },
+    amp:{
+        gain:1
+    }
 
 }
 
@@ -35,21 +40,22 @@ const reducers = (state = defaultState, action) => {
 
                 return {
                     ...state,
-                    [action.module]: {
-                        ...state[action.module],
-                        [action.moduleIndex]: {
-                            ...state[action.module][action.moduleIndex],
-                            [action.param]: action.value
-                        }
-
-                    }
+                    [action.module]: state[action.module].map((module, index) => {
+                        if (index == action.moduleIndex) module[action.param] = action.value
+                        return module
+                    })
 
                 }
             }
 
-
-
-
+        case 'SET_POWER':
+            return {
+                ...state,
+                power: {
+                    ...state.power,
+                    active: action.active
+                }
+            }
 
         default: return state
     }

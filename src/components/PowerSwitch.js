@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
-import { setParam } from '../actions/actions.js';
+import { setPower } from '../actions/actions.js';
 
 import { connect } from 'react-redux';
 import { directive } from '@babel/types';
@@ -20,17 +20,19 @@ class PowerSwitch extends React.Component {
         this.state = {
 
         }
+        
     }
-    toggle(){
+    toggle(e){ 
+        
         const {   module } = this.props;
-        this.props.setParam(module, 'active', !this.props.value)
+        this.props.setPower(e.target.checked)
 
     }
     render() {
         const {value} = this.props
         return (
             <div>
-            <input checked={value} onClick={this.toggle.bind(this)} type="checkbox"/> Power
+            <input checked={value} onChange={this.toggle.bind(this)} type="checkbox"/> Power
             </div>
         );
     }
@@ -44,6 +46,6 @@ PowerSwitch.defaultProps = {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ setParam }, dispatch)
+  return bindActionCreators({ setPower }, dispatch)
 }
 export default connect(null, mapDispatchToProps)(PowerSwitch);

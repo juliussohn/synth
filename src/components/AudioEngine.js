@@ -6,8 +6,10 @@ class AudioEngine extends React.Component {
     constructor(props) {
         super(props)
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        this.vco = [null, null]
+        this.vco = []
+        this.vcoGain = []
 
+        this.gain =  this.audioCtx.createGain();
 
         this.biquadFilter = this.audioCtx.createBiquadFilter();
         this.biquadFilter.type = "lowpass";
@@ -22,10 +24,11 @@ class AudioEngine extends React.Component {
         //this.vco2.connect(this.biquadFilter);
 
 
-        this.biquadFilter.connect(this.audioCtx.destination);
+        this.biquadFilter.connect(this.gain);
+        this.gain.connect(this.audioCtx.destination);
 
 
-        this.start();
+        //this.start();
         //this.biquadFilter.connect(this.compressor);
         //this.compressor.connect(this.audioCtx.destination);
 
@@ -35,23 +38,30 @@ class AudioEngine extends React.Component {
     }
 
     startVCO(index) {
-        this.vco[index] = this.audioCtx.createOscillator();
+        const ctx = this.audioCtx
+        this.vco[index] = ctx.createOscillator();
         this.vco[index].type = this.props.vco[index].type;
-        this.vco[index].frequency.setValueAtTime(this.props.vco[index].pitch, this.audioCtx.currentTime); // value in hertz
+        this.vco[index].frequency.setValueAtTime(this.props.vco[index].pitch, ctx.currentTime); // value in hertz
 
-        this.vco[index].connect(this.biquadFilter)
+        this.vcoGain[index] = ctx.createGain();
+        this.vcoGain[index].gain.setValueAtTime(this.props.vco[index].gain, ctx.currentTime);
+
+
+        this.vco[index].connect(this.vcoGain[index])
+        this.vcoGain[index].connect(this.biquadFilter);
+
         this.vco[index].start();
     }
 
     stopVCO(index) {
         this.vco[index].stop(this.audioCtx.currentTime);
-        this.vco[index] = null;
+        //this.vco[index] = null;
     }
 
 
     start() {
         const _this = this
-        this.vco.forEach((vco, i) => {
+        this.props.vco.forEach((vco, i) => {
             _this.startVCO(i);
         })
 
@@ -60,7 +70,8 @@ class AudioEngine extends React.Component {
 
     stop() {
         const _this = this
-        this.vco.forEach((vco, i) => {
+        this.props.vco.forEach((vco, i) => {
+            console.log(i)
             _this.stopVCO(i);
         })
     }
@@ -71,6 +82,8 @@ class AudioEngine extends React.Component {
         this.vco.forEach((vco, i) => {
             vco.type = nextProps.vco[i].type
             vco.frequency.setValueAtTime(nextProps.vco[i].pitch, ctx.currentTime)
+            this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain, ctx.currentTime);
+
         })
 
 
@@ -80,6 +93,7 @@ class AudioEngine extends React.Component {
             this.stop()
         }
 
+        this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime); // value in hertz
         this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime); // value in hertz
         this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime); // value in hertz
 

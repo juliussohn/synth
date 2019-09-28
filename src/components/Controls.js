@@ -16,35 +16,38 @@ const Row = styled.div`
 class Controls extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
+    }
 
-        }
-    }
-    componentWillReceiveProps(p){
-        console.log(p)
-    }
+
     render() {
+
+        const { props } = this
+        console.log(props);
+
         return (
             <div className="Controls">
-                <PowerSwitch module={'power'} value={this.props.power.active}/>
+                <PowerSwitch module={'power'} value={props.power.active} />
                 <Row>
-                    <div>
-                        <h2>VCO 1</h2>
-                        <KnobControl label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={0} param={'pitch'} min={20} max={1000} value={this.props.vco[0].pitch}></KnobControl>
-                        <WaveformSelector label={"Type"}  module={'vco'} moduleIndex={0} param={'type'}value={this.props.vco[0].type}></WaveformSelector>
+                    {props.vco.map((vco, i) => {
+                        return <div key={`vco_${i}`}>
+                            <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
+                            <KnobControl key={`vco_pitch_${i}`} label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={i} param={'pitch'} min={20} max={1000} value={props.vco[i].pitch}></KnobControl>
+                            <KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>
 
-                    </div>
-                    <div>
-                        <h2>VCO 2</h2>
-                        <KnobControl label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={1} param={'pitch'} min={20} max={1000} value={this.props.vco[1].pitch}></KnobControl>
-                        <WaveformSelector label={"Type"}  module={'vco'} moduleIndex={1} param={'type'}value={this.props.vco[1].type}></WaveformSelector>
+                            <WaveformSelector key={`vco_shape_${i}`} label={"Type"} module={'vco'} moduleIndex={i} param={'type'} value={props.vco[i].type}></WaveformSelector>
 
-                    </div>
+                        </div>
+                    })}
+
                     <div>
                         <h2>FILTER</h2>
-                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} param={'frequency'} min={0} max={5000} value={this.props.filter.frequency}></KnobControl>
-                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={this.props.filter.resonance}></KnobControl>
+                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
+                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
 
+                    </div>
+                    <div>
+                        <h2>AMP</h2>
+                        <KnobControl label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
                     </div>
                 </Row>
             </div>
@@ -53,8 +56,6 @@ class Controls extends React.Component {
 
 }
 const mapStateToProps = (state) => {
-    console.log(state)
-
     return {
         ...state.state
     }
