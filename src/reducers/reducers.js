@@ -56,7 +56,7 @@ let defaultState = {
         }
     ],
     filter: {
-        frequency: 900,
+        frequency: 2000,
         resonance: 1
     },
     amp:{

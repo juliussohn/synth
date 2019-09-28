@@ -23,3 +23,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+h2{
+  letter-spacing:1px;
+font-size:20px;
+}
+
+hr{
+  background: grey;
+  height:1px;
+  outline:none;
+  border:none;
+}

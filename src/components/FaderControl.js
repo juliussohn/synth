@@ -47,7 +47,7 @@ justify-content:center;
 const Tick = styled.div`
   background-color:white;
   height:1px;
-  width:${props => props.size == 'big' ? 30 : 20}px;
+  width:${props => props.size == 'big' ? 24 : 18}px;
   opacity:.3;
 `
 const Inner = styled.div`

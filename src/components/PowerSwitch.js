@@ -18,6 +18,8 @@ const options = [
 const Container = styled.div`
     display:flex;
     margin-bottom:20px;
+    flex-direction:column;
+    align-items:center;
 `
 const Track = styled.div`
     box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(255,255,255,0.16);
@@ -27,7 +29,8 @@ const Track = styled.div`
     overflow:auto;
     cursor:pointer;
     transition: all .2s;
-    margin-left:8px;
+    margin-top:10px;
+    margin-bottom:30px;
 `
 
 const Knob = styled.div`
