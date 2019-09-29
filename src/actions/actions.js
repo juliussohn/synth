@@ -14,3 +14,9 @@ export const setPower = (active) =>(
         active
     }
 )
+
+export const tick = () =>(
+    {
+        type: 'TICK',
+    }
+)

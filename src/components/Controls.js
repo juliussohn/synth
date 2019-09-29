@@ -6,6 +6,7 @@ import PowerSwitch from '../components/PowerSwitch'
 import KnobControl from '../components/KnobControl'
 import FaderControl from '../components/FaderControl'
 import WaveformSelector from '../components/WaveformSelector'
+import Sequencer from '../components/Sequencer'
 
 const Row = styled.div`
  display:flex;
@@ -39,25 +40,37 @@ class Controls extends React.Component {
         return (
             <div className="Controls">
                 <Row>
-                <Module>
+                    <Module>
 
-                    <h2>AMP</h2>
+                        <h2>AMP</h2>
                         <KnobControl label={"Master Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
-                        <hr/>
-<br/>
+                        <hr />
+                        <br />
                         <h2>FILTER</h2>
                         <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
-                      
+
                         <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
-                        <hr/>
-                        <br/>
-                        <br/>
+                        <hr />
+                        <br />
+                        <br />
 
                         <PowerSwitch module={'power'} value={props.power.active} />
 
                     </Module>
+                    <Module>
+
+                        <h2>ENV</h2>
+                        <KnobControl label={"Attack"} unit={"s"} module={'envelope'} param={'attack'} min={0} max={2} value={props.envelope.attack}></KnobControl>
+                        <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} min={0} max={2} value={props.envelope.release}></KnobControl>
+                        <hr />
+                        <br />
+                        <h2>Sequencer</h2>
+                        <KnobControl label={"Tempo"} unit={"BPM"} module={'sequencer'} param={'tempo'} min={40} max={180} value={props.sequencer.tempo}></KnobControl>
+                        <KnobControl label={"Gate"} unit={"%"} module={'sequencer'} param={'gate'} min={0} max={100} value={props.sequencer.gate}></KnobControl>
+
+                    </Module>
                     {props.vco.map((vco, i) => {
-                        return( <Module key={`vco_${i}`}>
+                        return (<Module key={`vco_${i}`}>
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
                             <KnobControl key={`vco_pitch_${i}`} label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={i} param={'pitch'} min={20} max={1000} value={props.vco[i].pitch}></KnobControl>
                             {/*<KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>*/}
@@ -68,8 +81,10 @@ class Controls extends React.Component {
                         )
                     })}
 
-                 
-                  
+
+<Module>
+<Sequencer></Sequencer>
+</Module>
                 </Row>
             </div>
         );

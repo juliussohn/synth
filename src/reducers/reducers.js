@@ -7,60 +7,31 @@ let defaultState = {
         {
             pitch: 150,
             type: 'sawtooth',
-            gain:1
+            gain: 1
         },
         {
             pitch: 150,
             type: 'sawtooth',
-            gain:0
+            gain: 0
         },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        },
-        {
-            pitch: 150,
-            type: 'sawtooth',
-            gain:0
-        }
+
     ],
+    envelope: {
+        attack: .2,
+        release: .5,
+    },
     filter: {
         frequency: 2000,
         resonance: 1
     },
-    amp:{
-        gain:1
+    sequencer: {
+        tempo: 90,
+        gate: 50,
+        currentStep: 0,
+        steps: 16
+    },
+    amp: {
+        gain: 1
     }
 
 }
@@ -94,6 +65,15 @@ const reducers = (state = defaultState, action) => {
                 power: {
                     ...state.power,
                     active: action.active
+                }
+            }
+
+        case 'TICK':
+            return {
+                ...state,
+                sequencer: {
+                    ...state.sequencer,
+                    currentStep: state.sequencer.currentStep == state.sequencer.steps - 1 ? 0 : state.sequencer.currentStep + 1
                 }
             }
 

@@ -64,7 +64,7 @@ class PowerSwitch extends React.Component {
             <Container >
                 <Label style={{textAlign:'left'}}>Power</Label>
                 <Track style={{background: value ? '#aaa':'#111'}} onClick={this.toggle.bind(this)} active={value}>
-                    <Knob style={{marginLeft: value ? 22:2}}></Knob></Track>
+                    <Knob style={{marginLeft: value ? 26:2}}></Knob></Track>
             </Container>
         );
     }   

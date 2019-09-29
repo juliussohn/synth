@@ -156,7 +156,7 @@ class KnobControl extends React.Component {
             delay: this.state.dragging ? 0 : 1
 
           }}>
-          {Math.round(this.props.value)} {this.props.unit}
+          {Math.round(this.props.value*100)/100} {this.props.unit}
         </Value>
 
       </Container>

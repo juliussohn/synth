@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { tick } from '../actions/actions.js';
+import { bindActionCreators } from 'redux';
 
 
 class AudioEngine extends React.Component {
@@ -9,23 +11,26 @@ class AudioEngine extends React.Component {
         this.vco = []
         this.vcoGain = []
 
-        this.gain =  this.audioCtx.createGain();
+        this.gain = this.audioCtx.createGain();
+        this.envelope = this.audioCtx.createGain();
+        this.envelope.gain.value = 0;
+
 
         this.biquadFilter = this.audioCtx.createBiquadFilter();
         this.biquadFilter.type = "lowpass";
         this.biquadFilter.frequency.value = props.filter.frequency
         this.biquadFilter.gain.value = 0;
         this.biquadFilter.Q.value = props.filter.resonance;
-
         this.compressor = this.audioCtx.createDynamicsCompressor();
-
 
         //this.vco1.connect(this.biquadFilter);
         //this.vco2.connect(this.biquadFilter);
 
 
-        this.biquadFilter.connect(this.gain);
+        this.biquadFilter.connect(this.envelope);
+        this.envelope.connect(this.gain);
         this.gain.connect(this.audioCtx.destination);
+
 
 
         //this.start();
@@ -46,17 +51,43 @@ class AudioEngine extends React.Component {
         this.vcoGain[index] = ctx.createGain();
         this.vcoGain[index].gain.setValueAtTime(this.props.vco[index].gain, ctx.currentTime);
 
-
         this.vco[index].connect(this.vcoGain[index])
         this.vcoGain[index].connect(this.biquadFilter);
 
         this.vco[index].start();
     }
 
-    stopVCO(index) {
-        this.vco[index].stop(this.audioCtx.currentTime);
-        //this.vco[index] = null;
+    stopVCO(index, time = 0) {
+        const ctx = this.audioCtx
+        this.vco[index].stop(ctx.currentTime + time + this.props.envelope.release);
     }
+
+
+    startSequencer() {
+        const _this = this;
+        this.start();
+        _this.playSweep()
+
+        var createTimeout = (callback) => {
+            _this.sequencerInterval = setTimeout(function () {
+                _this.playSweep()
+                _this.props.tick()
+                callback(callback)
+            }, (60 / _this.props.sequencer.tempo) * 1000)
+
+
+
+        }
+        createTimeout(createTimeout);
+
+
+    }
+
+    stopSequencer() {
+        clearInterval(this.sequencerInterval)
+    }
+
+
 
 
     start() {
@@ -68,12 +99,64 @@ class AudioEngine extends React.Component {
     }
 
 
-    stop() {
+    stop(length) {
         const _this = this
         this.props.vco.forEach((vco, i) => {
-            console.log(i)
-            _this.stopVCO(i);
+            _this.stopVCO(i, length);
         })
+    }
+
+    playSweep() {
+        const { envelope, sequencer } = this.props
+
+        if (sequencer.gate == 0) return
+        const ctx = this.audioCtx
+        const stepLength = 60 / sequencer.tempo
+        const sweepLength = (stepLength / 100) * sequencer.gate
+
+
+        const start = ctx.currentTime;
+        const attack = start + envelope.attack;
+        const hold = sweepLength
+        const release = envelope.release
+
+
+        this.envelope.gain.cancelScheduledValues(ctx.currentTime);
+
+        if (envelope.attack > 0) {
+            this.envelope.gain.setValueAtTime(0, ctx.currentTime)
+            this.envelope.gain.linearRampToValueAtTime(1, ctx.currentTime + envelope.attack)
+        } else {
+            this.envelope.gain.setValueAtTime(1, ctx.currentTime)
+
+        }
+
+        if(envelope.attack > sweepLength){
+            this.envelope.gain.cancelAndHoldAtTime(ctx.currentTime + sweepLength)
+        }
+
+       
+
+
+        if (sequencer.gate < 100) {
+
+            if(envelope.release > 0  ){
+                this.envelope.gain.setTargetAtTime(0, ctx.currentTime + sweepLength, envelope.release)
+    
+            }else{
+                this.envelope.gain.setValueAtTime(0, ctx.currentTime + sweepLength)
+
+            }
+
+            this.envelope.gain.setValueAtTime(0, ctx.currentTime + stepLength)
+
+        }
+        console.log(sweepLength)
+
+        // this.start()
+        //  this.stop(sweepLength)
+
+
     }
 
 
@@ -88,9 +171,9 @@ class AudioEngine extends React.Component {
 
 
         if (nextProps.power.active && !this.props.power.active) {
-            this.start()
+            this.startSequencer()
         } else if (!nextProps.power.active && this.props.power.active) {
-            this.stop()
+            this.stopSequencer()
         }
 
         this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime); // value in hertz
@@ -115,7 +198,9 @@ const mapStateToProps = (state) => {
         ...state.state
     }
 }
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ tick }, dispatch)
+}
 
 
-
-export default connect(mapStateToProps, null)(AudioEngine);
+export default connect(mapStateToProps, mapDispatchToProps)(AudioEngine);
