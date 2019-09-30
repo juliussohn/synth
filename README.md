@@ -12,3 +12,7 @@
 3. Open http://localhost:3000 to view it in the browser.
 
 4. Switch on the synth and use your keyboard to play notes.
+
+### Latest build
+
+https://tender-roentgen-251c59.netlify.com
