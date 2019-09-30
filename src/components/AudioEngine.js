@@ -60,11 +60,14 @@ class AudioEngine extends React.Component {
         }
     }
 
+    convertFrequencyOctave(frequency, octave) {
+        return frequency * Math.pow(2, octave)
+    }
+
     noteToFrequency(note, octave = 0) {
         const a = Math.pow(2, 1 / 12)
-        const frequency = this.baseFrequency * Math.pow(a, (note)) * Math.pow(2, octave);
-
-
+        const noteFrequency = (this.baseFrequency * Math.pow(a, (note)))
+        const frequency = this.convertFrequencyOctave(noteFrequency, octave);
         return frequency
     }
 
@@ -94,13 +97,9 @@ class AudioEngine extends React.Component {
     }
 
     onKeyUp(e) {
-        if(e.key == this.state.keyPressed){
-            this.setState({ keyPressed: false })
-            this.releaseSound();
-
-
-        }
-
+        if (e.key != this.state.keyPressed) return
+        this.setState({ keyPressed: false })
+        this.releaseSound();
     }
 
 
@@ -114,7 +113,7 @@ class AudioEngine extends React.Component {
         // this.vco[index].frequency.setValueAtTime(this.props.vco[index].pitch, ctx.currentTime); // value in hertz
 
         this.vcoGain[index] = ctx.createGain();
-        //  this.vcoGain[index].gain.setValueAtTime(this.props.vco[index].gain, ctx.currentTime);
+        this.vcoGain[index].gain.setValueAtTime(this.props.vco[index].gain, ctx.currentTime);
 
         this.vco[index].connect(this.vcoGain[index])
         this.vcoGain[index].connect(this.biquadFilter);
@@ -182,10 +181,9 @@ class AudioEngine extends React.Component {
 
         const ctx = this.audioCtx;
         this.vco.forEach((vco, i) => {
-            vco.frequency.setValueAtTime(frequency + this.props.vco[i].pitch, ctx.currentTime)
+            vco.frequency.setValueAtTime( this.getVCOFrequency(i), ctx.currentTime)
 
         })
-
 
         const { envelope, sequencer } = this.props
 
@@ -208,13 +206,21 @@ class AudioEngine extends React.Component {
 
     }
 
+    getVCOFrequency(i) {
+        const frequency =   this.convertFrequencyOctave(this.getFrequency(), this.props.vco[i].octave) + this.props.vco[i].pitch;
+        console.log('VCO FREQ',frequency)
+        console.log('FILER',this.props.filter)
+
+        return frequency
+
+    }
 
     componentWillReceiveProps(nextProps) {
         const ctx = this.audioCtx;
         const _this = this
         this.vco.forEach((vco, i) => {
             vco.type = nextProps.vco[i].type
-            vco.frequency.setValueAtTime(_this.getFrequency() + nextProps.vco[i].pitch, ctx.currentTime)
+            vco.frequency.setValueAtTime(this.getVCOFrequency(i) , ctx.currentTime)
             this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain, ctx.currentTime);
 
         })

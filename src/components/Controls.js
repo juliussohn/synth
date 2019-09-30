@@ -58,9 +58,9 @@ class Controls extends React.Component {
                     </Module>
                     <Module>
                         <h2>Stuff</h2>
-                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'}  param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
+                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
 
-</Module>
+                    </Module>
                     <Module>
 
                         <h2>ENVELOPE</h2>
@@ -75,6 +75,7 @@ class Controls extends React.Component {
 
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
                             <KnobControl key={`vco_pitch_${i}`} label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={i} param={'pitch'} min={-200} max={200} value={props.vco[i].pitch}></KnobControl>
+                            <KnobControl key={`vco_octave_${i}`} snap={1} label={"Octave"} size={60} module={'vco'} moduleIndex={i} param={'octave'} min={-2} max={2} value={props.vco[i].octave}></KnobControl>
                             {/*<KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>*/}
                             <FaderControl key={`vco_gain2_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></FaderControl>
 
@@ -83,7 +84,7 @@ class Controls extends React.Component {
                         )
                     })}
 
-{/*
+                    {/*
                     <Module>
                         <h2>Sequencer</h2>
                         <KnobControl label={"Tempo"} unit={"BPM"} module={'sequencer'} param={'tempo'} min={40} max={180} value={props.sequencer.tempo}></KnobControl>

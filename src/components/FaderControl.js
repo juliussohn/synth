@@ -65,7 +65,7 @@ width:100%;
 
  position:relative;
  height: ${props => props.size}px;
-padding-bottom:60px;
+margin-bottom:60px;
   `;
 
 

@@ -4,14 +4,16 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
-import { motion ,transform} from "framer-motion"
+import { motion, transform } from "framer-motion"
 import Label from './Label'
 
 const Container = styled.div`
+position:relative;
+margin-bottom:20px;
 `;
 
 const Inner = styled.div`
- padding:20px;
+ padding:15px;
  display:flex;
  align-items:center;
  justify-content:center;
@@ -47,16 +49,22 @@ const Value = styled(motion.div)`
   box-shadow: 0 12px 33px 0 rgba(0,0,0,0.37);
   border-radius: 20px;
   height: 40px;
+  padding:0 15px;
   font-size: 16px;
   color: #B0B0B0;
   letter-spacing: 1px;
   text-align: center;
   line-height:40px;
+  position:absolute;
+  margin-left:50%;
+  width:auto;
+  white-space:nowrap
+z-index:999;
 `;
 
 const ValueVariants = {
-  hidden: { opacity: 0, transform: `translateY(20px)` },
-  visible: { opacity: 1, transform: `translateY(0px)` },
+  hidden: { opacity: 0, transform: `translate(-50%, 20px)` },
+  visible: { opacity: 1, transform: `translate(-50%, 0px)` },
 }
 
 
@@ -119,9 +127,9 @@ class KnobControl extends React.Component {
 
     let newValue = this.state.freezeValue + (delta * (totalDelta / increment));
 
-    if(this.props.snap !== false){
-       newValue = Math.round(this.state.freezeValue + (delta * (totalDelta / increment)));
-      console.log(newValue,'snap')
+    if (this.props.snap !== false) {
+      newValue = Math.round(this.state.freezeValue + (delta * (totalDelta / increment)));
+      console.log(newValue, 'snap')
 
     }
 
@@ -131,7 +139,7 @@ class KnobControl extends React.Component {
     this.props.setParam(module, moduleIndex, param, newValue)
   }
 
-  onDoubleClick(e){
+  onDoubleClick(e) {
     const { param, module, moduleIndex } = this.props;
 
     this.props.setParam(module, moduleIndex, param, this.defaultValue)
@@ -162,7 +170,7 @@ class KnobControl extends React.Component {
             delay: this.state.dragging ? 0 : 1
 
           }}>
-          {Math.round(this.props.value*100)/100} {this.props.unit}
+          {Math.round(this.props.value * 100) / 100} {this.props.unit}
         </Value>
 
       </Container>
@@ -180,8 +188,8 @@ KnobControl.defaultProps = {
   param: 'pitch',
   unit: '',
   moduleIndex: false,
-  size:80,
-  snap:false
+  size: 80,
+  snap: false
 }
 
 const mapDispatchToProps = (dispatch) => {

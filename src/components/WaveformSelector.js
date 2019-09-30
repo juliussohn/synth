@@ -17,11 +17,11 @@ const options = [
 
 
 const Select = styled.div`
-padding:15px 10px ;
+padding:5px 10px ;
  background-color: ${props => props.active ? '#ccc' : '#222'};
  color: ${props => props.active ? '#222' : 'white'};
  text-align:center;
- margin-bottom:12px;
+ margin-bottom:8px;
  border-radius:4px;
  text-transform:uppercase;
  cursor:pointer;
