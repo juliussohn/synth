@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
-import { motion, transform } from "framer-motion"
+import { motion } from "framer-motion"
 import Label from './Label'
 
 const Container = styled.div`
@@ -95,11 +95,7 @@ class KnobControl extends React.Component {
     return minDeg + ((value - min) / (max - min)) * (maxDeg - minDeg);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      rotate: this.getRotation(nextProps.value)
-    })
-  }
+  
 
   onMouseDown(event) {
     this.setState({
@@ -154,8 +150,8 @@ class KnobControl extends React.Component {
         <Label>{this.props.label}</Label>
         <Inner>
           <KnobBase size={this.props.size} onDoubleClick={this.onDoubleClick.bind(this)} onMouseDown={this.onMouseDown.bind(this)} >
-            <KnobInner style={{ transform: `rotate(${this.state.rotate}deg)` }}>
-              <Pointer style={{ transform: `rotate(-${this.state.rotate}deg)` }}></Pointer>
+            <KnobInner style={{ transform: `rotate(${this.getRotation(this.props.value)}deg)` }}>
+              <Pointer style={{ transform: `rotate(-${this.getRotation(this.props.value)}deg)` }}></Pointer>
             </KnobInner>
           </KnobBase>
         </Inner>

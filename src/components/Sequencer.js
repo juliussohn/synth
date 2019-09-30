@@ -24,16 +24,14 @@ height:10px;
 
 
 
-class Controls extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+class Sequencer extends React.Component {
+  
 
     renderLEDs() {
         const leds = [];
         const { steps, currentStep } = this.props.sequencer
         for (let i = 0; i < steps; i++) {
-            leds.push(<LED key={i} active={i == currentStep}></LED>)
+            leds.push(<LED key={i} active={i === currentStep}></LED>)
         }
         return leds
     }
@@ -63,4 +61,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 */
 
-export default connect(mapStateToProps, null)(Controls);
+export default connect(mapStateToProps, null)(Sequencer);

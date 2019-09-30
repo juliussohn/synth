@@ -60,7 +60,7 @@ const reducers = (state = defaultState, action) => {
                 return {
                     ...state,
                     [action.module]: state[action.module].map((module, index) => {
-                        if (index == action.moduleIndex) module[action.param] = action.value
+                        if (index === action.moduleIndex) module[action.param] = action.value
                         return module
                     })
 
@@ -81,7 +81,7 @@ const reducers = (state = defaultState, action) => {
                 ...state,
                 sequencer: {
                     ...state.sequencer,
-                    currentStep: state.sequencer.currentStep == state.sequencer.steps - 1 ? 0 : state.sequencer.currentStep + 1
+                    currentStep: state.sequencer.currentStep === state.sequencer.steps - 1 ? 0 : state.sequencer.currentStep + 1
                 }
             }
 

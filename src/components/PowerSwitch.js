@@ -4,16 +4,9 @@ import { bindActionCreators } from 'redux';
 import { setPower } from '../actions/actions.js';
 
 import { connect } from 'react-redux';
-import { directive } from '@babel/types';
 import Label from './Label'
 
 
-const options = [
-    'sine',
-    'triangle',
-    'sawtooth',
-    'square'
-]
 
 const Container = styled.div`
     display:flex;
@@ -54,7 +47,7 @@ class PowerSwitch extends React.Component {
     }
     toggle() {
 
-        const { module,value } = this.props;
+        const { value } = this.props;
         this.props.setPower(!value)
 
     }

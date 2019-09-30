@@ -6,7 +6,6 @@ import PowerSwitch from '../components/PowerSwitch'
 import KnobControl from '../components/KnobControl'
 import FaderControl from '../components/FaderControl'
 import WaveformSelector from '../components/WaveformSelector'
-import Sequencer from '../components/Sequencer'
 
 const Row = styled.div`
  display:flex;
@@ -27,10 +26,6 @@ const Module = styled.div`
 
 
 class Controls extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
 
     render() {
 

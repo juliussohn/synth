@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { setParam } from '../actions/actions.js';
 import { connect } from 'react-redux';
-import { motion, transform } from "framer-motion"
+import {  transform } from "framer-motion"
 import Label from './Label'
 
 const knobWidth = 40;
@@ -47,11 +47,10 @@ justify-content:center;
 const Tick = styled.div`
   background-color:white;
   height:1px;
-  width:${props => props.size == 'big' ? 24 : 18}px;
+  width:${props => props.size === 'big' ? 24 : 18}px;
   opacity:.3;
 `
 const Inner = styled.div`
-
  position:relative;
  height:100%;
  display:flex;
@@ -73,7 +72,7 @@ const Grip = styled.div`
 background-image: linear-gradient(180deg, #1C1C1C 0%, #4D4D4D 99%);
 width:100%;
 height:2px;
-opacity:.5
+opacity:.5;
 
 `
 
@@ -170,7 +169,7 @@ class FaderControl extends React.Component {
   }
 
   onDoubleClick(e) {
-    const { param, module, moduleIndex } = this.props;
+  //  const { param, module, moduleIndex } = this.props;
 
     //this.props.setParam(module, moduleIndex, param, this.defaultValue)
 
@@ -181,7 +180,7 @@ class FaderControl extends React.Component {
 
     const ticks = [];
     for (let i = 0; i < scale; i++) {
-      ticks.push(<Tick size={i % 5 == 0 ? 'big' : 'small'}></Tick>)
+      ticks.push(<Tick key={i} size={i % 5 === 0 ? 'big' : 'small'}></Tick>)
     }
     return ticks;
   }
@@ -198,22 +197,19 @@ class FaderControl extends React.Component {
               <Scale align={'end'}>{this.renderScale()}</Scale>
               <Track  ></Track>
               <Scale align={'start'}>{this.renderScale()}</Scale>
-
             </Background>
             {this.getTransform.bind(this)}
             <Knob onDoubleClick={this.onDoubleClick.bind(this)} onMouseDown={this.onMouseDown.bind(this)} style={{ transform: `translateY(${this.getTransform()}px)` }}>
-              <Grip></Grip>            
-              <Grip></Grip>            
-              <Grip></Grip>            
+              <Grip></Grip>
+              <Grip></Grip>
+              <Grip></Grip>
               <Pointer></Pointer>
-              <Grip></Grip>            
-              <Grip></Grip>            
-              <Grip></Grip>   
+              <Grip></Grip>
+              <Grip></Grip>
+              <Grip></Grip>
             </Knob>
           </Inner>
         </Outer>
-
-
       </Container>
     );
   }

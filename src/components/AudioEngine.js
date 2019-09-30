@@ -50,8 +50,8 @@ class AudioEngine extends React.Component {
     }
 
     onKeyDown(e) {
-        this.pitch = this.keyToPitch(e.key)
-        if (this.pitch !== false && e.key != this.keyPressed) {
+        if (this.keyToPitch(e.key) !== false && e.key !== this.keyPressed) {
+            this.pitch = this.keyToPitch(e.key)
             if (this.keyPressed !== false) {
                 this.lastNoteReleased = new Date() //key get overwritten, means old one is released
                 console.log('PRESSD', this.keyPressed)
@@ -64,7 +64,7 @@ class AudioEngine extends React.Component {
     }
 
     onKeyUp(e) {
-        if (e.key != this.keyPressed) return
+        if (e.key !== this.keyPressed) return
         this.keyPressed = false
         this.releaseNote();
     }
@@ -131,7 +131,7 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx
         this.vco[index] = ctx.createOscillator();
         this.vco[index].type = this.props.vco[index].type;
-        // this.vco[index].frequency.setValueAtTime(this.props.vco[index].pitch, ctx.currentTime); // value in hertz
+        //this.vco[index].frequency.setValueAtTime(this.props.vco[index].pitch, ctx.currentTime); // value in hertz
 
         this.vcoGain[index] = ctx.createGain();
         this.vcoGain[index].gain.setValueAtTime(this.props.vco[index].gain, ctx.currentTime);
@@ -179,36 +179,56 @@ class AudioEngine extends React.Component {
 
     changeNote() {
         const ctx = this.audioCtx;
+        const _this = this
         const now = new Date()
-        const diff = (now.getTime() - this.lastNoteReleased.getTime()) / 1000;
-        console.log(diff)
-        const portamento = diff >= 0 && diff < this.props.general.portamento ? this.props.general.portamento - diff : 0;
-
+        let portamento
+        if (this.props.general.portamento > 0) {
+            const diff = (now.getTime() - this.lastNoteReleased.getTime()) / 1000;
+            console.log(diff)
+            portamento = diff >= 0 && diff < this.props.general.portamento ? this.props.general.portamento - diff : 0;
+        } else {
+            portamento = 0
+        }
         this.vco.forEach((vco, i) => {
-            const currentFrequency = vco.frequency;
             const targetFrequency = this.getVCOFrequency(i);
-            const startFrequency = transform(portamento, [0, this.props.portamento], [currentFrequency, targetFrequency])
-            vco.frequency.setValueAtTime(startFrequency, ctx.currentTime)
-            vco.frequency.linearRampToValueAtTime(targetFrequency, ctx.currentTime + portamento)
+
+            if (portamento > 0) {
+                const currentFrequency = vco.frequency.value;
+                const startFrequency = transform(portamento, [0, _this.props.general.portamento], [currentFrequency, targetFrequency])
+                console.log('start', startFrequency)
+                console.log('current', currentFrequency)
+                console.log('target', targetFrequency)
+
+                console.log('portamento General', _this.props.general.portamento)
+                console.log('portamento resr', portamento)
+                console.log(startFrequency)
+               // vco.frequency.cancelScheduledValues(ctx.currentTime)
+                vco.frequency.setValueAtTime(startFrequency, ctx.currentTime)
+                vco.frequency.linearRampToValueAtTime(targetFrequency, ctx.currentTime + portamento)
+            } else {
+                vco.frequency.setValueAtTime(targetFrequency, ctx.currentTime)
+
+            }
+
 
         })
     }
 
     triggerEnvelope() {
         const ctx = this.audioCtx;
-        const { envelope, sequencer } = this.props
+        const { envelope } = this.props
         const startTime = ctx.currentTime
 
         this.envelope.gain.cancelScheduledValues(0);
-        // this.envelope.gain.setValueAtTime(0, startTime)
-        this.envelope.gain.setTargetAtTime(0, startTime, 0.015) // prevent click
+        this.envelope.gain.setValueAtTime(0, startTime)
+        //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
         this.envelope.gain.linearRampToValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setTargetAtTime(envelope.sustain / 100, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
 
     }
     releaseNote() {
-        const { envelope, sequencer } = this.props
+        const { envelope } = this.props
         this.lastNoteReleased = new Date()
         const ctx = this.audioCtx
         const startTime = ctx.currentTime
