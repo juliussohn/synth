@@ -46,9 +46,9 @@ class Controls extends React.Component {
                         <KnobControl label={"Master Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
                         <hr />
                         <br />
-                        <h2>FILTER</h2>
-                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
-                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
+                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
+                        <KnobControl label={"Portamento"} unit={"s"} module={'general'} param={'portamento'} min={0} max={3} value={props.general.portamento}></KnobControl>
+
                         <hr />
                         <br />
                         <br />
@@ -56,21 +56,7 @@ class Controls extends React.Component {
                         <PowerSwitch module={'power'} value={props.power.active} />
 
                     </Module>
-                    <Module>
-                        <h2>Stuff</h2>
-                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
-                        <KnobControl label={"Portamento"} unit={"s"} module={'general'} param={'portamento'} min={0} max={3} value={props.general.portamento}></KnobControl>
-                        
-                    </Module>
-                    <Module>
 
-                        <h2>ENVELOPE</h2>
-                        <KnobControl label={"Attack"} unit={"s"} module={'envelope'} param={'attack'} min={0} max={2} value={props.envelope.attack}></KnobControl>
-                        <KnobControl label={"Decay"} unit={"s"} module={'envelope'} param={'decay'} min={0} max={2} value={props.envelope.decay}></KnobControl>
-                        <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
-                        <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} min={0} max={2} value={props.envelope.release}></KnobControl>
-
-                    </Module>
                     {props.vco.map((vco, i) => {
                         return (<Module key={`vco_${i}`}>
 
@@ -84,7 +70,22 @@ class Controls extends React.Component {
                         </Module>
                         )
                     })}
+                    <Module>
+                        <h2>FILTER</h2>
+                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
+                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
 
+                    </Module>
+
+                    <Module>
+
+                        <h2>ENVELOPE</h2>
+                        <KnobControl label={"Attack"} unit={"s"} module={'envelope'} param={'attack'} min={0} max={2} value={props.envelope.attack}></KnobControl>
+                        <KnobControl label={"Decay"} unit={"s"} module={'envelope'} param={'decay'} min={0} max={2} value={props.envelope.decay}></KnobControl>
+                        <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
+                        <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} min={0} max={2} value={props.envelope.release}></KnobControl>
+
+                    </Module>
                     {/*
                     <Module>
                         <h2>Sequencer</h2>
