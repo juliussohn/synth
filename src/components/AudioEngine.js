@@ -51,20 +51,21 @@ class AudioEngine extends React.Component {
 
     onKeyDown(e) {
         this.pitch = this.keyToPitch(e.key)
-        if (this.pitch !== false && e.key != this.state.keyPressed) {
-            if (this.state.keyPressed !== false){
+        if (this.pitch !== false && e.key != this.keyPressed) {
+            if (this.keyPressed !== false){
                 this.lastNoteReleased = new Date() //key get overwritten, means old one is released
+                console.log('PRESSD',this.keyPressed)
             }
             const frequency = this.getFrequency()
-            this.setState({ keyPressed: e.key })
+            this.keyPressed =  e.key 
             this.triggerNote(frequency);
            
         }
     }
 
     onKeyUp(e) {
-        if (e.key != this.state.keyPressed) return
-        this.setState({ keyPressed: false })
+        if (e.key != this.keyPressed) return
+        this.keyPressed = false
         this.releaseNote();
     }
 
@@ -180,7 +181,8 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx;
         const now = new Date()
         const diff = (now.getTime() - this.lastNoteReleased.getTime()) / 1000;
-        const portamento = diff > 0 && diff < this.props.general.portamento ? this.props.general.portamento - diff : 0;
+        console.log(diff)
+        const portamento = diff >= 0 && diff < this.props.general.portamento ? this.props.general.portamento - diff : 0;
 
         this.vco.forEach((vco, i) => {
             const currentFrequency = vco.frequency;

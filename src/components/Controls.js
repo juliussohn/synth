@@ -41,10 +41,16 @@ class Controls extends React.Component {
             <div className="Controls">
                 <Row>
                     <Module>
+                    <h2>SYNTH</h2>
 
-                        <h2>AMP</h2>
+                    <PowerSwitch module={'power'} value={props.power.active} />
+                    <hr />
+                        <br />
+                        <br />
                         <KnobControl label={"Master Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
-                        <hr />
+                       
+                        <br />
+ <hr />
                         <br />
                         <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
                         <KnobControl label={"Portamento"} unit={"s"} module={'general'} param={'portamento'} min={0} max={3} value={props.general.portamento}></KnobControl>
@@ -53,7 +59,6 @@ class Controls extends React.Component {
                         <br />
                         <br />
 
-                        <PowerSwitch module={'power'} value={props.power.active} />
 
                     </Module>
 
@@ -72,7 +77,7 @@ class Controls extends React.Component {
                     })}
                     <Module>
                         <h2>FILTER</h2>
-                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={5000} value={props.filter.frequency}></KnobControl>
+                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={10000} value={props.filter.frequency}></KnobControl>
                         <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
 
                     </Module>
