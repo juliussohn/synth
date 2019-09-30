@@ -119,6 +119,12 @@ class KnobControl extends React.Component {
 
     let newValue = this.state.freezeValue + (delta * (totalDelta / increment));
 
+    if(this.props.snap !== false){
+       newValue = Math.round(this.state.freezeValue + (delta * (totalDelta / increment)));
+      console.log(newValue,'snap')
+
+    }
+
     if (newValue > max) newValue = max
     else if (newValue < min) { newValue = min }
     console.log(module, moduleIndex, param, newValue)
@@ -174,7 +180,8 @@ KnobControl.defaultProps = {
   param: 'pitch',
   unit: '',
   moduleIndex: false,
-  size:80
+  size:80,
+  snap:false
 }
 
 const mapDispatchToProps = (dispatch) => {

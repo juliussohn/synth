@@ -13,9 +13,9 @@ height:10px;
  width:10px;
  border-radius:100%;
 
- ${props => props.active ? 
-    'background: #25d025; background: radial-gradient(40% 35%, #5aef5a, #25d025 60%); box-shadow: inset 0 3px 5px 1px rgba(0,0,0,0.1),  0 1px 0 rgba(255,255,255,0.4),  0 0 10px 2px rgba(0, 210, 0, 0.5);' : 
-    'background: #ddd; background: linear-gradient(#ccc, #fff); box-shadow: inset 0 2px 1px rgba(0,0,0,0.15), 0 2px 5px rgba(200,200,200,0.1); '}
+ ${props => props.active ?
+        'background: #25d025; background: radial-gradient(40% 35%, #5aef5a, #25d025 60%); box-shadow: inset 0 3px 5px 1px rgba(0,0,0,0.1),  0 1px 0 rgba(255,255,255,0.4),  0 0 10px 2px rgba(0, 210, 0, 0.5);' :
+        'background: #ddd; background: linear-gradient(#ccc, #fff); box-shadow: inset 0 2px 1px rgba(0,0,0,0.15), 0 2px 5px rgba(200,200,200,0.1); '}
 
 `;
 
@@ -29,10 +29,10 @@ class Controls extends React.Component {
         super(props);
     }
 
-    renderLEDs(){
+    renderLEDs() {
         const leds = [];
-        const { steps, currentStep} = this.props.sequencer
-        for(let i  =0; i<steps; i++){
+        const { steps, currentStep } = this.props.sequencer
+        for (let i = 0; i < steps; i++) {
             leds.push(<LED key={i} active={i == currentStep}></LED>)
         }
         return leds
@@ -46,7 +46,7 @@ class Controls extends React.Component {
 
         return (
             <Container>
-                    {this.renderLEDs()}
+                {this.renderLEDs()}
             </Container>
         );
     }

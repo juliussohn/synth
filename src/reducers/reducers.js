@@ -2,22 +2,28 @@ let defaultState = {
     power: {
         active: false
     },
-
+    general:{
+        octave:0,
+    },
     vco: [
         {
-            pitch: 150,
+            pitch: 0,
             type: 'sawtooth',
-            gain: 1
+            gain: 1,
+            octave: 0
         },
         {
-            pitch: 150,
+            pitch: 0,
             type: 'sawtooth',
-            gain: 0
+            gain: 0,
+            octave: 0
         },
 
     ],
     envelope: {
         attack: .2,
+        decay: .2,
+        sustain: 100,
         release: .5,
     },
     filter: {
@@ -32,7 +38,8 @@ let defaultState = {
     },
     amp: {
         gain: 1
-    }
+    },
+
 
 }
 
