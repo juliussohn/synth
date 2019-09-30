@@ -95,7 +95,6 @@ class AudioEngine extends React.Component {
     }
 
 
-
     getFrequency() {
         const a = Math.pow(2, 1 / 12)
         const octave = this.pitch.octave + this.props.general.octave
@@ -106,11 +105,7 @@ class AudioEngine extends React.Component {
 
     getVCOFrequency(i) {
         const frequency = this.convertFrequencyOctave(this.getFrequency(), this.props.vco[i].octave) + this.props.vco[i].pitch;
-        console.log('VCO FREQ', frequency)
-        console.log('FILER', this.props.filter)
-
         return frequency
-
     }
 
 
@@ -176,26 +171,18 @@ class AudioEngine extends React.Component {
     }
      */
 
-
-
-
-
     triggerNote() {
+        this.changeNote();
+        this.triggerEnvelope();
+    }
 
+    changeNote(){
         const ctx = this.audioCtx;
-        const { envelope, sequencer } = this.props
-        const startTime = ctx.currentTime
-
         const now = new Date()
         const diff = (now.getTime() - this.lastNoteReleased.getTime()) / 1000;
         const portamento = diff > 0 && diff < this.props.general.portamento ? this.props.general.portamento - diff : 0;
 
-
-
-        console.log(diff)
-        console.log(portamento)
         this.vco.forEach((vco, i) => {
-
             const currentFrequency = vco.frequency;
             const targetFrequency = this.getVCOFrequency(i);
             const startFrequency = transform(portamento, [0, this.props.portamento], [currentFrequency, targetFrequency])
@@ -203,14 +190,20 @@ class AudioEngine extends React.Component {
             vco.frequency.linearRampToValueAtTime(targetFrequency, ctx.currentTime + portamento)
 
         })
+    }
+
+    triggerEnvelope(){
+        const ctx = this.audioCtx;
+        const { envelope, sequencer } = this.props
+        const startTime = ctx.currentTime
 
         this.envelope.gain.cancelScheduledValues(0);
         this.envelope.gain.setValueAtTime(0, startTime)
         this.envelope.gain.linearRampToValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setTargetAtTime(envelope.sustain / 100, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
-    }
 
+    }
     releaseNote() {
         const { envelope, sequencer } = this.props
         this.lastNoteReleased = new Date()
