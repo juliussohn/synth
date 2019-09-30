@@ -1,7 +1,7 @@
 
 ## Synth
 
-1. Install teh dependencies:
+1. Install the dependencies:
 
 `npm install`
 
