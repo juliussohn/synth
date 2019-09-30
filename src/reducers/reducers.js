@@ -4,6 +4,7 @@ let defaultState = {
     },
     general:{
         octave:0,
+        portamento:0
     },
     vco: [
         {

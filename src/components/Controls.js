@@ -59,7 +59,8 @@ class Controls extends React.Component {
                     <Module>
                         <h2>Stuff</h2>
                         <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
-
+                        <KnobControl label={"Portamento"} unit={"s"} module={'general'} param={'portamento'} min={0} max={3} value={props.general.portamento}></KnobControl>
+                        
                     </Module>
                     <Module>
 
