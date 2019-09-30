@@ -52,14 +52,14 @@ class AudioEngine extends React.Component {
     onKeyDown(e) {
         this.pitch = this.keyToPitch(e.key)
         if (this.pitch !== false && e.key != this.keyPressed) {
-            if (this.keyPressed !== false){
+            if (this.keyPressed !== false) {
                 this.lastNoteReleased = new Date() //key get overwritten, means old one is released
-                console.log('PRESSD',this.keyPressed)
+                console.log('PRESSD', this.keyPressed)
             }
             const frequency = this.getFrequency()
-            this.keyPressed =  e.key 
+            this.keyPressed = e.key
             this.triggerNote(frequency);
-           
+
         }
     }
 
@@ -177,7 +177,7 @@ class AudioEngine extends React.Component {
         this.triggerEnvelope();
     }
 
-    changeNote(){
+    changeNote() {
         const ctx = this.audioCtx;
         const now = new Date()
         const diff = (now.getTime() - this.lastNoteReleased.getTime()) / 1000;
@@ -194,13 +194,14 @@ class AudioEngine extends React.Component {
         })
     }
 
-    triggerEnvelope(){
+    triggerEnvelope() {
         const ctx = this.audioCtx;
         const { envelope, sequencer } = this.props
         const startTime = ctx.currentTime
 
         this.envelope.gain.cancelScheduledValues(0);
-        this.envelope.gain.setValueAtTime(0, startTime)
+        // this.envelope.gain.setValueAtTime(0, startTime)
+        this.envelope.gain.setTargetAtTime(0, startTime, 0.015) // prevent click
         this.envelope.gain.linearRampToValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setValueAtTime(1, startTime + envelope.attack);
         this.envelope.gain.setTargetAtTime(envelope.sustain / 100, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
