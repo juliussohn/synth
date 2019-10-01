@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { tick } from '../actions/actions.js';
+import { tick, pressNote } from '../actions/actions.js';
 import { bindActionCreators } from 'redux';
 import { transform } from "framer-motion"
 import * as midi from "@tonaljs/midi";
@@ -17,7 +17,6 @@ const transposeFrequencyByOctave = (frequency, octave) => {
 
 const transposeFrequencyByCents = (frequency, cents) => {
     const freq = frequency * Math.pow(2, cents / 1200)
-    console.log(freq)
     return freq
 }
 const transposeFrequencyBySemitones = (frequency, semitones) => {
@@ -33,7 +32,7 @@ class AudioEngine extends React.Component {
         this.state = {
             playing: false
         }
-        
+
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.vco = []
         this.vcoGain = []
@@ -53,22 +52,11 @@ class AudioEngine extends React.Component {
         this.envelope.connect(this.gain);
         this.gain.connect(this.audioCtx.destination);
 
-        this.pitch = {
-            note: 0,
-            octave: 0
-        }
-        this.lastNoteReleased = new Date()
-
-        this.note = tonal.note("C3");
-        this.notePressed = false;
-        this.baseFrequency = 262
-        this.keys = ['a', 'w', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j', 'k', 'o', 'l', 'p', ';']
-        this.frequencies = []
+        this.pressedNotes = [];
     }
 
-    mapKeyboardToMidi(key){
-        console.log(key)
-        switch (key){
+    mapKeyboardToMidi(key) {
+        switch (key) {
             case 'a': return 48;
             case 'w': return 49;
             case 's': return 50;
@@ -104,12 +92,13 @@ class AudioEngine extends React.Component {
     getMIDIMessage(midiMessage) {
 
         const note = midiMessage.data[1];
-        const velocity = midiMessage.data[2];
+        const velocity = transform(midiMessage.data[2], [1, 127], [0, 1]);
         const noteName = midi.midiToNoteName(note)
-        console.log(note)
+        console.log(velocity);
+
         switch (midiMessage.data[0]) {
             case 144:
-                this.playNote(noteName)
+                this.playNote(noteName, velocity)
                 break;
             case 128:
                 this.releaseNote(noteName)
@@ -117,20 +106,25 @@ class AudioEngine extends React.Component {
         }
     }
 
-    playNote(noteName) {
+    playNote(noteName, velocity = 1) {
         const ctx = this.audioCtx;
-        const glide = this.notePressed;
+        const glide = this.pressedNotes.length > 0;
+        
+        console.log(glide)
+        if (!glide) this.triggerEnvelope(velocity)
 
-        if (!glide) this.triggerEnvelope()
+        if(this.pressedNotes.indexOf(noteName) == -1)  this.pressedNotes.push(noteName)// dont add key if already in 
+        const note = tonal.note(noteName)
 
-        this.notePressed = true
-        this.note = tonal.note(noteName)
+        this.props.pressNote(note, velocity)
 
-        const baseFrequency = this.getBaseFrequency(this.note);
+        const baseFrequency = this.getBaseFrequency(note);
 
         this.vco.forEach((vco, i) => {
             const frequency = this.getVCOFrequency(i, baseFrequency)
             if (glide && this.props.general.glide) {
+                console.log('GLIDE',glide);
+
                 vco.frequency.cancelScheduledValues(ctx.currentTime)
                 vco.frequency.setValueAtTime(vco.frequency.value, ctx.currentTime)
                 vco.frequency.linearRampToValueAtTime(frequency, ctx.currentTime + this.props.general.glide)
@@ -141,10 +135,28 @@ class AudioEngine extends React.Component {
     }
 
     releaseNote(noteName) {
-        if (this.note.name == noteName) {
-            this.releaseEnvelope();
-            this.notePressed = false
+
+        if (this.props.keyboard.note.name == noteName) {
         }
+        const keyIndex = this.pressedNotes.indexOf(noteName)
+        console.log(keyIndex);
+        console.log('releasenote',noteName)
+        console.log('beforerelease',this.pressedNotes)
+
+        this.pressedNotes =  this.pressedNotes.filter(function(value, index, arr){
+            return index != keyIndex;
+        });
+
+        console.log('release',this.pressedNotes)
+
+        if(this.pressedNotes.length){
+            this.playNote(this.pressedNotes[this.pressedNotes.length-1], this.props.keyboard.velocity)
+        }else{
+            this.releaseEnvelope();
+
+        }
+
+
     }
 
     getBaseFrequency(note) {
@@ -167,7 +179,7 @@ class AudioEngine extends React.Component {
     componentDidMount() {
         window.addEventListener('keydown', this.onKeyDown.bind(this));
         window.addEventListener('keyup', this.onKeyUp.bind(this));
-        
+
         if (navigator.requestMIDIAccess) {
             navigator.requestMIDIAccess()
                 .then(this.onMIDISuccess.bind(this), this.onMIDIFailure.bind(this));
@@ -194,7 +206,7 @@ class AudioEngine extends React.Component {
         this.keyPressed = false
         const midiNote = this.mapKeyboardToMidi(e.key);
         const noteName = midi.midiToNoteName(midiNote);
-      
+
         this.releaseNote(noteName);
     }
 
@@ -237,7 +249,7 @@ class AudioEngine extends React.Component {
     startVCO(index) {
         const ctx = this.audioCtx
 
-        const frequency  = this.getVCOFrequency(index, this.getBaseFrequency(this.note))
+        const frequency = this.getVCOFrequency(index, this.getBaseFrequency(this.props.keyboard.note))
 
         this.vco[index] = ctx.createOscillator();
         this.vco[index].type = this.props.vco[index].type;
@@ -258,19 +270,19 @@ class AudioEngine extends React.Component {
         this.vco[index].stop(ctx.currentTime + time + this.props.envelope.release);
     }
 
-  
 
-    triggerEnvelope() {
+
+    triggerEnvelope(velocity = 1) {
         const ctx = this.audioCtx;
         const { envelope } = this.props
         const startTime = ctx.currentTime
-
+        console.log(velocity)
         this.envelope.gain.cancelScheduledValues(0);
         this.envelope.gain.setValueAtTime(0, startTime)
         //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
-        this.envelope.gain.linearRampToValueAtTime(1, startTime + envelope.attack);
-        this.envelope.gain.setValueAtTime(1, startTime + envelope.attack);
-        this.envelope.gain.setTargetAtTime(envelope.sustain / 100, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
+        this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
+        this.envelope.gain.setValueAtTime(velocity, startTime + envelope.attack);
+        this.envelope.gain.setTargetAtTime((envelope.sustain / 100) * velocity, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
 
     }
 
@@ -288,13 +300,12 @@ class AudioEngine extends React.Component {
     componentWillReceiveProps(nextProps) {
         const ctx = this.audioCtx;
 
+
         // update VCOs
         this.vco.forEach((vco, i) => {
-            vco.type = nextProps.vco[i].type
-            console.log(this.note)
-            console.log(this.getVCOFrequency(i, this.getBaseFrequency(this.note)))
-            vco.frequency.setValueAtTime(this.getVCOFrequency(i, this.getBaseFrequency(this.note)), ctx.currentTime)
-            this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain, ctx.currentTime);
+            if( nextProps.vco[i].type !== this.props.vco[i].type) vco.type = nextProps.vco[i].type
+            if( nextProps.vco[i].frequency !== this.props.vco[i].frequency) vco.frequency.setValueAtTime(this.getVCOFrequency(i, this.getBaseFrequency(nextProps.keyboard.note)), ctx.currentTime)
+            if( nextProps.vco[i].gain !== this.props.vco[i].gain)  this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain * nextProps.keyboard.velocity, ctx.currentTime);
         })
 
         // power
@@ -304,9 +315,9 @@ class AudioEngine extends React.Component {
             this.powerOff()
         }
 
-        this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime);
-        this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime);
-        this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime);
+        if( nextProps.amp.gain !== this.props.amp.gain) this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime);
+        if( nextProps.filter.frequency !== this.props.filter.frequency) this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime);
+        if( nextProps.filter.Q !== this.props.filter.Q) this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime);
 
     }
 
@@ -323,7 +334,7 @@ const mapStateToProps = (state) => {
     }
 }
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ tick }, dispatch)
+    return bindActionCreators({ tick, pressNote }, dispatch)
 }
 
 

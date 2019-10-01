@@ -15,6 +15,14 @@ export const setPower = (active) =>(
     }
 )
 
+export const pressNote = (note, velocity = 1) =>(
+    {
+        type: 'PRESS_NOTE',
+        note,
+        velocity
+    }
+)
+
 export const tick = () =>(
     {
         type: 'TICK',

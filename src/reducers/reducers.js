@@ -1,10 +1,12 @@
+import * as tonal from "@tonaljs/tonal";
+
 let defaultState = {
     power: {
         active: false
     },
-    general:{
-        octave:0,
-        glide:0
+    general: {
+        octave: 0,
+        glide: 0
     },
     vco: [
         {
@@ -12,16 +14,16 @@ let defaultState = {
             type: 'sawtooth',
             gain: 1,
             octave: 0,
-            semitones:0,
-            detune:0
+            semitones: 0,
+            detune: 0
         },
         {
             pitch: 0,
             type: 'sawtooth',
             gain: 0,
             octave: 0,
-            semitones:0,
-            detune:0,
+            semitones: 0,
+            detune: 0,
 
         },
 
@@ -44,6 +46,10 @@ let defaultState = {
     },
     amp: {
         gain: 1
+    },
+    keyboard: {
+        note: tonal.note("C3"),
+        velocity: 1
     },
 
 
@@ -80,6 +86,20 @@ const reducers = (state = defaultState, action) => {
                     active: action.active
                 }
             }
+
+        case 'PRESS_NOTE':
+            console.log(action)
+            return {
+                ...state,
+                keyboard: {
+                    ...state.keybpard,
+                    note: {
+                        ...action.note
+                    },
+                    velocity: action.velocity
+                }
+            }
+
 
         case 'TICK':
             return {
