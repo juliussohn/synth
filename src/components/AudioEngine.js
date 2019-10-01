@@ -156,8 +156,11 @@ class AudioEngine extends React.Component {
 
     }
 
-    getBaseFrequency(note) {
-        const baseNote = tonal.note(note.pc + (note.oct + this.props.general.octave))
+    getBaseFrequency(note, octave) {
+        if(!octave){
+            octave = this.props.general.octave
+        }
+        const baseNote = tonal.note(note.pc + (note.oct + octave))
         return baseNote.freq
 
     }
@@ -295,14 +298,14 @@ class AudioEngine extends React.Component {
     componentWillReceiveProps(nextProps) {
         const ctx = this.audioCtx;
 
-        console.log(nextProps.vco[1].type, this.props.vco[1].type)
-        console.log(nextProps.vco[1].gain, this.props.vco[1].gain)
-        console.log(nextProps.vco[1].detune, this.props.vco[1].detune)
+        console.log(nextProps.general.octave, this.props.general.octave)
+       // console.log(nextProps.vco[1].gain, this.props.vco[1].gain)
+      //  console.log(nextProps.vco[1].detune, this.props.vco[1].detune)
         // update VCOs
         this.vco.forEach((vco, i) => {
             
             if (nextProps.vco[i].type !== this.props.vco[i].type) vco.type = nextProps.vco[i].type
-            if (nextProps.vco[i].semitones !== this.props.vco[i].semitones || nextProps.vco[i].detune !== this.props.vco[i].detune) vco.frequency.setValueAtTime(this.getVCOFrequency(i, this.getBaseFrequency(nextProps.keyboard.note)), ctx.currentTime)
+            if (nextProps.general.octave !== this.props.general.octave || nextProps.vco[i].semitones !== this.props.vco[i].semitones || nextProps.vco[i].detune !== this.props.vco[i].detune) vco.frequency.setValueAtTime(this.getVCOFrequency(i, this.getBaseFrequency(nextProps.keyboard.note, nextProps.general.octave)), ctx.currentTime)
             if (nextProps.vco[i].gain !== this.props.vco[i].gain) this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain * nextProps.keyboard.velocity, ctx.currentTime);
           
         })

@@ -125,8 +125,9 @@ class KnobControl extends React.Component {
 
     if (this.props.snap !== false) {
       newValue = Math.round(this.state.freezeValue + (delta * (totalDelta / increment)));
-
     }
+
+    if(newValue == this.props.value) return
 
     if (newValue > max) newValue = max
     else if (newValue < min) { newValue = min }
