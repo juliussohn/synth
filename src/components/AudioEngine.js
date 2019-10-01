@@ -278,7 +278,14 @@ class AudioEngine extends React.Component {
         this.envelope.gain.cancelScheduledValues(0);
         this.envelope.gain.setValueAtTime(0, startTime)
         //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
-        this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
+
+        if(envelope.attack == 0){
+            this.envelope.gain.linearRampToValueAtTime(velocity, startTime + 0.001);
+
+        }else{
+            this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
+
+        }
         this.envelope.gain.setValueAtTime(velocity, startTime + envelope.attack);
         this.envelope.gain.setTargetAtTime((envelope.sustain / 100) * velocity, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
 
@@ -291,7 +298,9 @@ class AudioEngine extends React.Component {
         const startTime = ctx.currentTime
         this.envelope.gain.cancelScheduledValues(startTime);
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime);
-        this.envelope.gain.setTargetAtTime(0, startTime, this.getTimeConstant(envelope.release))
+
+        const releaseConstant = envelope.release > 0 ? this.getTimeConstant(envelope.release) : 0.0001
+        this.envelope.gain.setTargetAtTime(0, startTime, releaseConstant)
 
     }
 
