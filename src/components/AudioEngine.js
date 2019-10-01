@@ -202,8 +202,8 @@ class AudioEngine extends React.Component {
                 console.log('portamento General', _this.props.general.portamento)
                 console.log('portamento resr', portamento)
                 console.log(startFrequency)
-               // vco.frequency.cancelScheduledValues(ctx.currentTime)
-                vco.frequency.setValueAtTime(startFrequency, ctx.currentTime)
+                vco.frequency.cancelScheduledValues(ctx.currentTime)
+                vco.frequency.setValueAtTime(vco.frequency.value, ctx.currentTime)
                 vco.frequency.linearRampToValueAtTime(targetFrequency, ctx.currentTime + portamento)
             } else {
                 vco.frequency.setValueAtTime(targetFrequency, ctx.currentTime)
@@ -233,6 +233,7 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx
         const startTime = ctx.currentTime
         this.envelope.gain.cancelScheduledValues(startTime);
+        this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime);
         this.envelope.gain.setTargetAtTime(0, startTime, this.getTimeConstant(envelope.release))
 
     }
