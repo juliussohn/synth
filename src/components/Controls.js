@@ -48,7 +48,7 @@ class Controls extends React.Component {
  <hr />
                         <br />
                         <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
-                        <KnobControl label={"Portamento"} unit={"s"} module={'general'} param={'portamento'} min={0} max={3} value={props.general.portamento}></KnobControl>
+                        <KnobControl label={"glide"} unit={"s"} module={'general'} param={'glide'} min={0} max={3} value={props.general.glide}></KnobControl>
 
                         <hr />
                         <br />
@@ -61,8 +61,9 @@ class Controls extends React.Component {
                         return (<Module key={`vco_${i}`}>
 
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
-                            <KnobControl key={`vco_pitch_${i}`} label={"Pitch"} unit={"Hz"} module={'vco'} moduleIndex={i} param={'pitch'} min={-200} max={200} value={props.vco[i].pitch}></KnobControl>
-                            <KnobControl key={`vco_octave_${i}`} snap={1} label={"Octave"} size={60} module={'vco'} moduleIndex={i} param={'octave'} min={-2} max={2} value={props.vco[i].octave}></KnobControl>
+                            <KnobControl key={`vco_semitones_${i}`} snap={1} label={"semitones"}  module={'vco'} moduleIndex={i} param={'semitones'} min={-24} max={24} value={props.vco[i].semitones}></KnobControl>
+                            <KnobControl key={`vco_detune_${i}`} label={"detune"} unit={"ct"} module={'vco'} moduleIndex={i} param={'detune'} min={-200} max={200} value={props.vco[i].detune}></KnobControl>
+
                             {/*<KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>*/}
                             <FaderControl key={`vco_gain2_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></FaderControl>
 

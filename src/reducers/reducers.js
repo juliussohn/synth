@@ -4,20 +4,25 @@ let defaultState = {
     },
     general:{
         octave:0,
-        portamento:0
+        glide:0
     },
     vco: [
         {
             pitch: 0,
             type: 'sawtooth',
             gain: 1,
-            octave: 0
+            octave: 0,
+            semitones:0,
+            detune:0
         },
         {
             pitch: 0,
             type: 'sawtooth',
             gain: 0,
-            octave: 0
+            octave: 0,
+            semitones:0,
+            detune:0,
+
         },
 
     ],
