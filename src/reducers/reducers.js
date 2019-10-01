@@ -71,8 +71,14 @@ const reducers = (state = defaultState, action) => {
                 return {
                     ...state,
                     [action.module]: state[action.module].map((module, index) => {
-                        if (index === action.moduleIndex) module[action.param] = action.value
-                        return module
+                        if (index === action.moduleIndex) {
+                            return {
+                                ...module,
+                                [action.param]: action.value
+                            }
+                        }
+                        return module 
+
                     })
 
                 }

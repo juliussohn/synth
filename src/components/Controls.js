@@ -30,7 +30,6 @@ class Controls extends React.Component {
     render() {
 
         const { props } = this
-        console.log(props);
 
         return (
             <div className="Controls">
