@@ -6,6 +6,7 @@ import PowerSwitch from '../components/PowerSwitch'
 import KnobControl from '../components/KnobControl'
 import FaderControl from '../components/FaderControl'
 import WaveformSelector from '../components/WaveformSelector'
+import PresetManager from '../components/PresetManager'
 
 const Row = styled.div`
  display:flex;
@@ -41,13 +42,13 @@ class Controls extends React.Component {
                     <hr />
                         <br />
                         <br />
-                        <KnobControl label={"Master Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} value={props.amp.gain}></KnobControl>
+                        <KnobControl label={"Master Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} default={1} value={props.amp.gain}></KnobControl>
                        
                         <br />
  <hr />
                         <br />
-                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} value={props.general.octave}></KnobControl>
-                        <KnobControl label={"glide"} unit={"s"} module={'general'} param={'glide'} min={0} max={3} value={props.general.glide}></KnobControl>
+                        <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} default={0} value={props.general.octave}></KnobControl>
+                        <KnobControl label={"glide"} unit={"s"} module={'general'} param={'glide'} min={0} max={3} default={0} value={props.general.glide}></KnobControl>
 
                         <hr />
                         <br />
@@ -60,11 +61,11 @@ class Controls extends React.Component {
                         return (<Module key={`vco_${i}`}>
 
                             <h2 key={`vco_title_${i}`}>VCO {i + 1}</h2>
-                            <KnobControl key={`vco_semitones_${i}`} snap={1} label={"semitones"}  module={'vco'} moduleIndex={i} param={'semitones'} min={-24} max={24} value={props.vco[i].semitones}></KnobControl>
-                            <KnobControl key={`vco_detune_${i}`} label={"detune"} unit={"ct"} module={'vco'} moduleIndex={i} param={'detune'} min={-200} max={200} value={props.vco[i].detune}></KnobControl>
+                            <KnobControl key={`vco_semitones_${i}`} snap={1} label={"semitones"}  module={'vco'} moduleIndex={i} param={'semitones'} min={-24} max={24} default={0} value={props.vco[i].semitones}></KnobControl>
+                            <KnobControl key={`vco_detune_${i}`} label={"detune"} unit={"ct"} module={'vco'} moduleIndex={i} param={'detune'} min={-50} max={50} default={0} value={props.vco[i].detune}></KnobControl>
 
                             {/*<KnobControl key={`vco_gain_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></KnobControl>*/}
-                            <FaderControl key={`vco_gain2_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} value={props.vco[i].gain}></FaderControl>
+                            <FaderControl key={`vco_gain2_${i}`} label={"Gain"} module={'vco'} moduleIndex={i} param={'gain'} min={0} max={1} default={1} value={props.vco[i].gain}></FaderControl>
 
                             <WaveformSelector key={`vco_shape_${i}`} label={"Type"} module={'vco'} moduleIndex={i} param={'type'} value={props.vco[i].type}></WaveformSelector>
                         </Module>
@@ -72,8 +73,8 @@ class Controls extends React.Component {
                     })}
                     <Module>
                         <h2>FILTER</h2>
-                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={10000} value={props.filter.frequency}></KnobControl>
-                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} value={props.filter.resonance}></KnobControl>
+                        <KnobControl label={"Cutoff"} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={0} max={10000} default={2000} value={props.filter.frequency}></KnobControl>
+                        <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100}  default={0} value={props.filter.resonance}></KnobControl>
 
                     </Module>
 
@@ -85,6 +86,11 @@ class Controls extends React.Component {
                         <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
                         <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} min={0} max={2} value={props.envelope.release}></KnobControl>
 
+                    </Module>
+                    <Module>
+                    <h2>PRESETS</h2>
+
+                        <PresetManager></PresetManager>
                     </Module>
                     {/*
                     <Module>
