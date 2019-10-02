@@ -145,6 +145,7 @@ class AudioEngine extends React.Component {
         } else {
             this.releaseEnvelope();
 
+
         }
 
 
@@ -186,9 +187,10 @@ class AudioEngine extends React.Component {
 
     onKeyDown(e) {
         const midiCode = this.mapKeyboardToMidi(e.key);
-        if (!midiCode) return;
-        this.keyPressed = e.key;
         const noteName = midi.midiToNoteName(midiCode)
+
+        if (!midiCode || this.pressedNotes.indexOf(noteName) !== -1) return;
+        this.keyPressed = e.key;
         this.playNote(noteName)
 
 
