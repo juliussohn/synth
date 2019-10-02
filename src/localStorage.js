@@ -14,21 +14,7 @@ export const loadState = () => {
 
 export const saveState = (state) => {
     try {
-
-        const saveState = {
-            ...state,
-            state: {
-                ...state.state,
-                power: {
-                    active: 0
-                }
-            }
-        }
-
-        const serializedState = JSON.stringify(saveState);
-
-
-
+        const serializedState = JSON.stringify(state);
         localStorage.setItem('state', serializedState);
     } catch {
         // ignore write errors

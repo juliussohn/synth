@@ -30,20 +30,18 @@ class PresetManager extends React.Component {
     }
 
     onSave() {
-        this.props.setParam('meta', false, 'presetName', this.state.presetName)
         const state = store.getState()
-
+        this.props.setParam('meta', false, 'presetName', this.state.presetName)
         savePreset(state.state, this.state.presetName)
         this.fetch()
     }
 
     onClear() {
-
         let confirmed = window.confirm("DELETE ALL? SURE?");
         if (!confirmed) return
+        
         clearPresets();
         this.setState({ presetName: '' });
-
         this.fetch()
 
     }
@@ -52,12 +50,9 @@ class PresetManager extends React.Component {
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.state.presets)));
         element.setAttribute('download', "synth-presets");
-      
         element.style.display = 'none';
         document.body.appendChild(element);
-      
         element.click();
-      
         document.body.removeChild(element);
     }
 
