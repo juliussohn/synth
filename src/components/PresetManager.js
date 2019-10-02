@@ -30,8 +30,9 @@ class PresetManager extends React.Component {
     }
 
     onSave() {
-        const state = store.getState()
         this.props.setParam('meta', false, 'presetName', this.state.presetName)
+
+        const state = store.getState()
         savePreset(state.state, this.state.presetName)
         this.fetch()
     }
