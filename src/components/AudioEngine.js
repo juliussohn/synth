@@ -276,7 +276,7 @@ class AudioEngine extends React.Component {
         //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
 
         if (envelope.attack == 0) {
-            this.envelope.gain.linearRampToValueAtTime(velocity, startTime + 0.001);
+            this.envelope.gain.linearRampToValueAtTime(velocity, startTime);
 
         } else {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
