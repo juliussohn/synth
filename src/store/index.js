@@ -1,9 +1,19 @@
-import {createStore,combineReducers} from 'redux'
+import { createStore, combineReducers } from 'redux'
 import reducers from '../reducers/reducers.js'
+import { loadState, saveState } from '../localStorage.js'
+const persistedState = loadState();
 
 export const store = createStore(
     combineReducers({
-        state:reducers
+        state: reducers
     }),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+   // persistedState
 )
+
+/*
+store.subscribe(() => {
+    console.log(store.getState())
+    const currentState =  store.getState();
+    saveState(store.getState());
+});
+ */

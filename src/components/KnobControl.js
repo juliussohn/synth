@@ -77,7 +77,6 @@ class KnobControl extends React.Component {
       rotate: this.getRotation(props.value),
       dragging: false
     }
-    this.defaultValue = props.value
 
   }
 
@@ -135,9 +134,9 @@ class KnobControl extends React.Component {
   }
 
   onDoubleClick(e) {
-    const { param, module, moduleIndex } = this.props;
+    const { param, module, moduleIndex, } = this.props;
 
-    this.props.setParam(module, moduleIndex, param, this.defaultValue)
+    this.props.setParam(module, moduleIndex, param, this.props.default)
 
   }
 

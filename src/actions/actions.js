@@ -15,6 +15,13 @@ export const setPower = (active) =>(
     }
 )
 
+export const setPreset = (preset) =>(
+    {
+        type: 'SET_PRESET',
+        preset
+    }
+)
+
 export const pressNote = (note, velocity = 1) =>(
     {
         type: 'PRESS_NOTE',

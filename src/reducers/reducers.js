@@ -1,6 +1,9 @@
 import * as tonal from "@tonaljs/tonal";
 
-let defaultState = {
+export let defaultState = {
+    meta: {
+        presetName: ""
+    },
     power: {
         active: false
     },
@@ -77,7 +80,7 @@ const reducers = (state = defaultState, action) => {
                                 [action.param]: action.value
                             }
                         }
-                        return module 
+                        return module
 
                     })
 
@@ -90,6 +93,15 @@ const reducers = (state = defaultState, action) => {
                 power: {
                     ...state.power,
                     active: action.active
+                }
+            }
+
+        case 'SET_PRESET':
+            return {
+                ...state,
+                ...action.preset,
+                power: {
+                    active:state.power.active
                 }
             }
 

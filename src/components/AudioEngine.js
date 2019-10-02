@@ -109,7 +109,7 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx;
         const glide = this.pressedNotes.length > 0;
 
-         this.triggerEnvelope(velocity)
+        this.triggerEnvelope(velocity)
 
         if (this.pressedNotes.indexOf(noteName) == -1) this.pressedNotes.push(noteName)// dont add key if already in 
         const note = tonal.note(noteName)
@@ -120,9 +120,8 @@ class AudioEngine extends React.Component {
 
         this.vco.forEach((vco, i) => {
             const frequency = this.getVCOFrequency(i, baseFrequency)
-            console.log('val',this.envelope.gain.value)
-            if (this.envelope.gain.value > 0.1 && this.props.general.glide) {
 
+            if (this.envelope.gain.value > 0.1 && this.props.general.glide) {
                 vco.frequency.cancelScheduledValues(ctx.currentTime)
                 vco.frequency.setValueAtTime(vco.frequency.value, ctx.currentTime)
                 vco.frequency.linearRampToValueAtTime(frequency, ctx.currentTime + this.props.general.glide)
@@ -134,18 +133,12 @@ class AudioEngine extends React.Component {
 
     releaseNote(noteName) {
 
-        if (this.props.keyboard.note.name == noteName) {
-        }
         const keyIndex = this.pressedNotes.indexOf(noteName)
-        console.log(keyIndex);
-        console.log('releasenote', noteName)
-        console.log('beforerelease', this.pressedNotes)
-
+      
+        //remove released note
         this.pressedNotes = this.pressedNotes.filter(function (value, index, arr) {
             return index != keyIndex;
         });
-
-        console.log('release', this.pressedNotes)
 
         if (this.pressedNotes.length) {
             this.playNote(this.pressedNotes[this.pressedNotes.length - 1], this.props.keyboard.velocity)
@@ -158,7 +151,7 @@ class AudioEngine extends React.Component {
     }
 
     getBaseFrequency(note, octave) {
-        if(!octave){
+        if (!octave) {
             octave = this.props.general.octave
         }
         const baseNote = tonal.note(note.pc + (note.oct + octave))
@@ -276,14 +269,14 @@ class AudioEngine extends React.Component {
         const { envelope } = this.props
         const startTime = ctx.currentTime
         this.envelope.gain.cancelScheduledValues(0);
-        console.log(this.envelope.gain)
-        this.envelope.gain.setValueAtTime( this.envelope.gain.value, startTime)
+
+        this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
         //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
 
-        if(envelope.attack == 0){
+        if (envelope.attack == 0) {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime + 0.001);
 
-        }else{
+        } else {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
 
         }
@@ -301,7 +294,7 @@ class AudioEngine extends React.Component {
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime);
 
         const releaseConstant = envelope.release > 0 ? this.getTimeConstant(envelope.release) : 0.0001
-        console.log('releaseConstant',releaseConstant)
+        console.log('releaseConstant', releaseConstant)
         this.envelope.gain.setTargetAtTime(0, startTime, releaseConstant)
 
     }
@@ -310,15 +303,15 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx;
 
         console.log(nextProps.general.octave, this.props.general.octave)
-       // console.log(nextProps.vco[1].gain, this.props.vco[1].gain)
-      //  console.log(nextProps.vco[1].detune, this.props.vco[1].detune)
+        // console.log(nextProps.vco[1].gain, this.props.vco[1].gain)
+        //  console.log(nextProps.vco[1].detune, this.props.vco[1].detune)
         // update VCOs
         this.vco.forEach((vco, i) => {
-            
+
             if (nextProps.vco[i].type !== this.props.vco[i].type) vco.type = nextProps.vco[i].type
             if (nextProps.general.octave !== this.props.general.octave || nextProps.vco[i].semitones !== this.props.vco[i].semitones || nextProps.vco[i].detune !== this.props.vco[i].detune) vco.frequency.setValueAtTime(this.getVCOFrequency(i, this.getBaseFrequency(nextProps.keyboard.note, nextProps.general.octave)), ctx.currentTime)
             if (nextProps.vco[i].gain !== this.props.vco[i].gain) this.vcoGain[i].gain.setValueAtTime(nextProps.vco[i].gain * nextProps.keyboard.velocity, ctx.currentTime);
-          
+
         })
 
         // power
@@ -330,7 +323,7 @@ class AudioEngine extends React.Component {
 
         if (nextProps.amp.gain !== this.props.amp.gain) this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime);
         if (nextProps.filter.frequency !== this.props.filter.frequency) this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime);
-        if (nextProps.filter.Q !== this.props.filter.Q) this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime);
+        if (nextProps.filter.resonance !== this.props.filter.resonance) this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime);
 
     }
 
@@ -342,7 +335,7 @@ class AudioEngine extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    
+
     return {
         ...state.state
     }
