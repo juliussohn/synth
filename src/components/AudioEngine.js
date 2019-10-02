@@ -109,7 +109,7 @@ class AudioEngine extends React.Component {
         const ctx = this.audioCtx;
         const glide = this.pressedNotes.length > 0;
 
-        if (!glide) this.triggerEnvelope(velocity)
+         this.triggerEnvelope(velocity)
 
         if (this.pressedNotes.indexOf(noteName) == -1) this.pressedNotes.push(noteName)// dont add key if already in 
         const note = tonal.note(noteName)
@@ -120,7 +120,8 @@ class AudioEngine extends React.Component {
 
         this.vco.forEach((vco, i) => {
             const frequency = this.getVCOFrequency(i, baseFrequency)
-            if (glide && this.props.general.glide) {
+            console.log('val',this.envelope.gain.value)
+            if (this.envelope.gain.value > 0.1 && this.props.general.glide) {
 
                 vco.frequency.cancelScheduledValues(ctx.currentTime)
                 vco.frequency.setValueAtTime(vco.frequency.value, ctx.currentTime)
@@ -236,7 +237,6 @@ class AudioEngine extends React.Component {
 
     }
 
-
     powerOff(length) {
         const _this = this
         this.props.vco.forEach((vco, i) => {
@@ -276,7 +276,8 @@ class AudioEngine extends React.Component {
         const { envelope } = this.props
         const startTime = ctx.currentTime
         this.envelope.gain.cancelScheduledValues(0);
-        this.envelope.gain.setValueAtTime(0, startTime)
+        console.log(this.envelope.gain)
+        this.envelope.gain.setValueAtTime( this.envelope.gain.value, startTime)
         //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
 
         if(envelope.attack == 0){
@@ -300,6 +301,7 @@ class AudioEngine extends React.Component {
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime);
 
         const releaseConstant = envelope.release > 0 ? this.getTimeConstant(envelope.release) : 0.0001
+        console.log('releaseConstant',releaseConstant)
         this.envelope.gain.setTargetAtTime(0, startTime, releaseConstant)
 
     }
