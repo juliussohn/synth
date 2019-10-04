@@ -277,7 +277,7 @@ class AudioEngine extends React.Component {
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
 
         this.biquadFilter.frequency.cancelScheduledValues(0);
-      //   this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
+         this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
 
         if (envelope.attack == 0) {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime);
@@ -289,9 +289,9 @@ class AudioEngine extends React.Component {
         const a = Math.pow(2, 1 / 12)
         console.log(Math.pow(a,startFrequency))
 
-        const maxFrequency = transposeFrequencyByCents(startFrequency, 100  * filterEnvelope.intensity )
+        const maxFrequency = transposeFrequencyByCents(startFrequency, 50  * filterEnvelope.intensity )
        
-        const sustainFrequency = transposeFrequencyByCents(startFrequency, 100 * filterEnvelope.intensity * (filterEnvelope.sustain / 100))
+        const sustainFrequency = transposeFrequencyByCents(startFrequency, 50 * filterEnvelope.intensity * (filterEnvelope.sustain / 100))
 
         console.log('frequ',startFrequency, maxFrequency)  
 
