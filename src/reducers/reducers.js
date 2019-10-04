@@ -29,6 +29,15 @@ export let defaultState = {
             detune: 0,
 
         },
+        {
+            pitch: 0,
+            type: 'sawtooth',
+            gain: 0,
+            octave: 0,
+            semitones: 0,
+            detune: 0,
+
+        },
 
     ],
     envelope: {
@@ -37,8 +46,15 @@ export let defaultState = {
         sustain: 100,
         release: .5,
     },
+    filterEnvelope: {
+        attack: .2,
+        decay: .2,
+        sustain: 100,
+        release: .5,
+        intensity: 50,
+    },
     filter: {
-        frequency: 2000,
+        frequency: 1500,
         resonance: 1
     },
     sequencer: {

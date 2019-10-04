@@ -80,7 +80,31 @@ class KnobControl extends React.Component {
 
   }
 
+
+  onKeyDown(e) {
+    if (e.key == "Shift") {
+      this.setState({
+        freezeValue: this.props.value,
+        freezeRotation: this.getRotation(this.props.value),
+      })
+    }
+
+
+  }
+
+  onKeyUp(e) {
+    if (e.key == "Shift") {
+      this.setState({
+        freezeValue: this.props.value,
+        freezeRotation: this.getRotation(this.props.value),
+      })
+    }
+  }
+
   componentDidMount() {
+    window.addEventListener('keydown', this.onKeyDown.bind(this));
+    window.addEventListener('keyup', this.onKeyUp.bind(this));
+
     document.addEventListener('mousemove', this.onMouseMove.bind(this), false);
     document.addEventListener('mouseup', this.onMouseUp.bind(this), false);
   }
@@ -90,17 +114,50 @@ class KnobControl extends React.Component {
   }
 
   getRotation(value) {
-    const { min, max, minDeg, maxDeg } = this.props;
-    return minDeg + ((value - min) / (max - min)) * (maxDeg - minDeg);
+    if (this.props.log) {
+      return this.getRotationLog(value)
+    } else {
+      return this.getRotationLin(value)
+
+    }
   }
 
-  
+
+  getRotationLin(value) {
+
+    const { min, max, minDeg, maxDeg } = this.props;
+
+    const scale = (maxDeg - minDeg) / (max - min);
+
+
+    let rotation = minDeg + ((value - min) * scale);
+    console.log('rotation', rotation)
+
+    return rotation
+  }
+
+
+  getRotationLog(value) {
+    const { min, max, minDeg, maxDeg } = this.props;
+
+    const minV = Math.log(min)
+    const maxV = Math.log(max)
+
+
+    const scale = (maxV - minV) / (maxDeg - minDeg);
+
+    return minDeg + (Math.log(value) - minV) / scale;
+  }
+
+
+
 
   onMouseDown(event) {
     this.setState({
       dragStartY: event.clientY,
       dragging: true,
-      freezeValue: this.props.value
+      freezeValue: this.props.value,
+      freezeRotation: this.getRotation(this.props.value),
     })
   }
 
@@ -110,23 +167,60 @@ class KnobControl extends React.Component {
     })
   }
 
+
+
+  getValue(position) {
+    if (this.props.log) {
+      return this.getValueLog(position)
+    } else {
+      return this.getValueLin(position)
+
+    }
+  }
+
+  getValueLin(position) {
+    const { min, max, param, module, moduleIndex, minDeg, maxDeg } = this.props;
+
+    var scale = (max - min) / (maxDeg - minDeg);
+
+    return (position - minDeg) * scale + min
+
+
+  }
+
+
+  getValueLog(position) {
+    const { min, max, minDeg, maxDeg } = this.props;
+    const minV = Math.log(min)
+    const maxV = Math.log(max)
+    const scale = (maxV - minV) / (maxDeg - minDeg);
+
+    return Math.exp((position - minDeg) * scale + minV);
+
+  }
+
+
   onMouseMove(event) {
     if (!this.state.dragging) return
 
-    const { min, max, param, module, moduleIndex } = this.props;
+    const { min, max, param, module, moduleIndex, degreePerPixel } = this.props;
 
 
-    const delta = this.state.dragStartY - event.clientY
-    const totalDelta = (max - min)
-    const increment = event.shiftKey ? 400 : 100
 
-    let newValue = this.state.freezeValue + (delta * (totalDelta / increment));
 
-    if (this.props.snap !== false) {
-      newValue = Math.round(this.state.freezeValue + (delta * (totalDelta / increment)));
+    let delta = (this.state.dragStartY - event.clientY) * degreePerPixel
+
+    if (event.shiftKey) {
+      delta = delta * 0.2
     }
 
-    if(newValue == this.props.value) return
+    let newValue = this.getValue(this.state.freezeRotation + delta)
+
+    if (this.props.snap !== false) {
+      newValue = Math.round(newValue)
+    }
+
+    if (newValue == this.props.value) return
 
     if (newValue > max) newValue = max
     else if (newValue < min) { newValue = min }
@@ -183,7 +277,9 @@ KnobControl.defaultProps = {
   unit: '',
   moduleIndex: false,
   size: 80,
-  snap: false
+  snap: false,
+  log: false,
+  degreePerPixel: 1.5
 }
 
 const mapDispatchToProps = (dispatch) => {

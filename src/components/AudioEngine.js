@@ -134,7 +134,7 @@ class AudioEngine extends React.Component {
     releaseNote(noteName) {
 
         const keyIndex = this.pressedNotes.indexOf(noteName)
-      
+
         //remove released note
         this.pressedNotes = this.pressedNotes.filter(function (value, index, arr) {
             return index != keyIndex;
@@ -268,20 +268,40 @@ class AudioEngine extends React.Component {
 
     triggerEnvelope(velocity = 1) {
         const ctx = this.audioCtx;
-        const { envelope } = this.props
+        const { envelope, filterEnvelope, filter } = this.props
         const startTime = ctx.currentTime
-        this.envelope.gain.cancelScheduledValues(0);
+        const startFrequency = this.biquadFilter.frequency.value
 
+        console.log(startFrequency)
+        this.envelope.gain.cancelScheduledValues(0);
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
-        //this.envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.015) // prevent click
+
+        this.biquadFilter.frequency.cancelScheduledValues(0);
+      //   this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
 
         if (envelope.attack == 0) {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime);
-
         } else {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime + envelope.attack);
-
         }
+
+
+        const a = Math.pow(2, 1 / 12)
+        console.log(Math.pow(a,startFrequency))
+
+        const maxFrequency = transposeFrequencyByCents(startFrequency, 100  * filterEnvelope.intensity )
+       
+        const sustainFrequency = transposeFrequencyByCents(startFrequency, 100 * filterEnvelope.intensity * (filterEnvelope.sustain / 100))
+
+        console.log('frequ',startFrequency, maxFrequency)  
+
+        this.biquadFilter.frequency.exponentialRampToValueAtTime(maxFrequency, startTime + filterEnvelope.attack);
+
+        this.biquadFilter.frequency.setValueAtTime(maxFrequency, startTime + filterEnvelope.attack);
+        this.biquadFilter.frequency.setTargetAtTime(sustainFrequency, startTime + filterEnvelope.attack, this.getTimeConstant(filterEnvelope.decay))
+
+
+
         this.envelope.gain.setValueAtTime(velocity, startTime + envelope.attack);
         this.envelope.gain.setTargetAtTime((envelope.sustain / 100) * velocity, startTime + envelope.attack, this.getTimeConstant(envelope.decay))
 
@@ -289,14 +309,23 @@ class AudioEngine extends React.Component {
 
 
     releaseEnvelope() {
-        const { envelope } = this.props
+        const { envelope,filter, filterEnvelope} = this.props
         const ctx = this.audioCtx
         const startTime = ctx.currentTime
+        const startFrequency = this.biquadFilter.frequency.value
+
         this.envelope.gain.cancelScheduledValues(startTime);
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime);
 
+        this.biquadFilter.frequency.cancelScheduledValues(startTime);
+        this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime);
+
         const releaseConstant = envelope.release > 0 ? this.getTimeConstant(envelope.release) : 0.0001
-        console.log('releaseConstant', releaseConstant)
+        const filteReleaseConstant = filterEnvelope.release > 0 ? this.getTimeConstant(filterEnvelope.release) : 0.0001
+
+        this.biquadFilter.frequency.exponentialRampToValueAtTime( filter.frequency, startTime + filterEnvelope.release)
+
+        
         this.envelope.gain.setTargetAtTime(0, startTime, releaseConstant)
 
     }
@@ -304,7 +333,6 @@ class AudioEngine extends React.Component {
     componentWillReceiveProps(nextProps) {
         const ctx = this.audioCtx;
 
-        console.log(nextProps.general.octave, this.props.general.octave)
         // console.log(nextProps.vco[1].gain, this.props.vco[1].gain)
         //  console.log(nextProps.vco[1].detune, this.props.vco[1].detune)
         // update VCOs
