@@ -79,7 +79,7 @@ class PresetManager extends React.Component {
         const state = store.getState()
         delete state.state.keyboard
         delete state.state.sequencer
-        delete state.state.meta
+        //delete state.state.meta
         const string = JSON.stringify(state.state)
         function copyStringToClipboard(str) {
             // Create new element
