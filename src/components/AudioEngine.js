@@ -277,7 +277,7 @@ class AudioEngine extends React.Component {
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
 
         this.biquadFilter.frequency.cancelScheduledValues(0);
-      //   this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
+         this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
 
         if (envelope.attack == 0) {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime);
