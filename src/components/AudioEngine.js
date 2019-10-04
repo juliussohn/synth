@@ -50,7 +50,9 @@ class AudioEngine extends React.Component {
 
         this.biquadFilter.connect(this.envelope);
         this.envelope.connect(this.gain);
-        this.gain.connect(this.audioCtx.destination);
+
+        this.gain.connect(this.compressor);
+        this.compressor.connect(this.audioCtx.destination)
 
         this.pressedNotes = [];
     }
@@ -277,7 +279,7 @@ class AudioEngine extends React.Component {
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
 
         this.biquadFilter.frequency.cancelScheduledValues(0);
-         this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
+        this.biquadFilter.frequency.setValueAtTime(startFrequency, startTime)
 
         if (envelope.attack == 0) {
             this.envelope.gain.linearRampToValueAtTime(velocity, startTime);
@@ -287,17 +289,42 @@ class AudioEngine extends React.Component {
 
 
         const a = Math.pow(2, 1 / 12)
-        console.log(Math.pow(a,startFrequency))
 
-        const maxFrequency = transposeFrequencyByCents(filter.frequency, 50  * filterEnvelope.intensity )
-       
-        const sustainFrequency = transposeFrequencyByCents(filter.frequency, 50 * filterEnvelope.intensity * (filterEnvelope.sustain / 100))
 
-        console.log('frequ',startFrequency, maxFrequency)  
 
-        this.biquadFilter.frequency.linearRampToValueAtTime(maxFrequency, startTime + filterEnvelope.attack);
 
-        this.biquadFilter.frequency.setValueAtTime(maxFrequency, startTime + filterEnvelope.attack);
+        var minv = Math.log(filter.frequency);
+        var maxv = Math.log(20000);
+        var scale = (maxv - minv) / 100;
+
+        const maxFrequency = 20000;
+        const deltaFrequency = maxFrequency - filter.frequency;
+        const attackFrequency = Math.exp((filterEnvelope.intensity) * scale + minv);   //scale * filterEnvelope.intensity
+        const sustainFrequency = Math.exp((filterEnvelope.intensity * (filterEnvelope.sustain / 100)) * scale + minv);
+
+        //  return
+
+
+        console.log('log', scale * filterEnvelope.intensity)
+
+
+
+        // const freq = frequency * Math.pow(2, cents / 1200)
+
+
+        // 0 -> 100 intensity
+        // 0 -> max
+
+
+        //transposeFrequencyByCents(filter.frequency, 5  * filterEnvelope.intensity )
+
+
+        console.log('frequ delta', deltaFrequency)
+        console.log('frequ sust', deltaFrequency)
+        console.log('frequ', filter.frequency, filter.frequency + attackFrequency)
+
+        this.biquadFilter.frequency.exponentialRampToValueAtTime(attackFrequency, startTime + filterEnvelope.attack);
+        this.biquadFilter.frequency.setValueAtTime(attackFrequency, startTime + filterEnvelope.attack);
         this.biquadFilter.frequency.setTargetAtTime(sustainFrequency, startTime + filterEnvelope.attack, this.getTimeConstant(filterEnvelope.decay))
 
 
@@ -309,7 +336,7 @@ class AudioEngine extends React.Component {
 
 
     releaseEnvelope() {
-        const { envelope,filter, filterEnvelope} = this.props
+        const { envelope, filter, filterEnvelope } = this.props
         const ctx = this.audioCtx
         const startTime = ctx.currentTime
         const startFrequency = this.biquadFilter.frequency.value
@@ -323,9 +350,9 @@ class AudioEngine extends React.Component {
         const releaseConstant = envelope.release > 0 ? this.getTimeConstant(envelope.release) : 0.0001
         const filteReleaseConstant = filterEnvelope.release > 0 ? this.getTimeConstant(filterEnvelope.release) : 0.0001
 
-        this.biquadFilter.frequency.exponentialRampToValueAtTime( filter.frequency, startTime + filterEnvelope.release)
+        this.biquadFilter.frequency.exponentialRampToValueAtTime(filter.frequency, startTime + filterEnvelope.release)
 
-        
+
         this.envelope.gain.setTargetAtTime(0, startTime, releaseConstant)
 
     }
