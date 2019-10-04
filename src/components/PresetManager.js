@@ -23,6 +23,22 @@ class PresetManager extends React.Component {
     }
     componentDidMount() {
         this.fetch()
+        window.addEventListener("hashchange", this.loadFromUrl.bind(this), false);
+        
+        this.loadFromUrl();
+
+    }
+   
+    loadFromUrl(href){
+        if (window.location.hash) {
+            var hash = decodeURIComponent(window.location.hash.substring(1)); //Puts hash in variable, and removes the # character
+            var loadState = JSON.parse(hash)
+            if (loadState) {
+                this.loadPreset(loadState);
+            }
+        }
+        window.dispatchEvent(new Event('popstate'));
+
     }
     onNameChange(e) {
         this.setState({ presetName: e.target.value });
@@ -40,14 +56,14 @@ class PresetManager extends React.Component {
     onClear() {
         let confirmed = window.confirm("DELETE ALL? SURE?");
         if (!confirmed) return
-        
+
         clearPresets();
         this.setState({ presetName: '' });
         this.fetch()
 
     }
 
-    onExport(){
+    onExport() {
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.state.presets)));
         element.setAttribute('download', "synth-presets");
@@ -55,6 +71,39 @@ class PresetManager extends React.Component {
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
+    }
+
+    onShare() {
+        const url = 'https://tender-roentgen-251c59.netlify.com'
+        //const url = 'http://localhost:3000'
+        const state = store.getState()
+        delete state.state.keyboard
+        delete state.state.sequencer
+        delete state.state.meta
+        const string = JSON.stringify(state.state)
+        function copyStringToClipboard(str) {
+            // Create new element
+            var el = document.createElement('textarea');
+            // Set value (string to be copied)
+            el.value = str;
+            // Set non-editable to avoid focus and move outside of view
+            el.setAttribute('readonly', '');
+            el.style = { position: 'absolute', left: '-9999px' };
+            document.body.appendChild(el);
+            // Select text inside element
+            el.select();
+            // Copy text to clipboard
+            document.execCommand('copy');
+            // Remove temporary element
+            document.body.removeChild(el);
+        }
+
+        var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
+
+        console.log(queryString);
+        
+        copyStringToClipboard(url + '#' + encodeURIComponent(string))
+        alert('Copied to clipboard!')
     }
 
     fetch() {
@@ -80,15 +129,16 @@ class PresetManager extends React.Component {
             <div className="PresetManager">
                 <input type="text" placeholder="Enter preset name" onChange={this.onNameChange.bind(this)} value={this.state.presetName} />
                 <button onClick={this.onSave.bind(this)}>SAVE</button>
-                <button  onClick={() => { this.loadPreset(defaultState) }}>DEFAULT</button>
+                <button onClick={() => { this.loadPreset(defaultState) }}>DEFAULT</button>
                 <h4>Saved Presets</h4>
-                <select style={{width:100}} size={this.state.presets.length == 0 ? 2 : this.state.presets.length+1}>
+                <select style={{ width: 100 }} size={this.state.presets.length == 0 ? 2 : this.state.presets.length + 1}>
                     {this.state.presets.map(p => {
                         return <option onClick={() => { this.loadPreset(p) }}>{p.meta.presetName}</option>
                     })}
                 </select>
                 <button onClick={this.onClear.bind(this)}>DELETE ALL</button>
                 <button onClick={this.onExport.bind(this)}>EXPORT ALL</button>
+                <button onClick={this.onShare.bind(this)}>SHARE PATCH</button>
 
             </div>
         );
