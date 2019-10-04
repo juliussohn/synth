@@ -114,6 +114,7 @@ const reducers = (state = defaultState, action) => {
 
         case 'SET_PRESET':
             return {
+                ...defaultState,
                 ...state,
                 ...action.preset,
                 power: {
