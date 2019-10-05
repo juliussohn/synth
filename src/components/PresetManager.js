@@ -7,10 +7,14 @@ import { bindActionCreators } from 'redux';
 import { setParam, setPreset } from '../actions/actions.js';
 import { connect } from 'react-redux';
 import { metaProperty } from '@babel/types';
+import PresetButton from '../components/PresetButton'
 
 
-const Preset = styled.div`
+const Container = styled.div`
+display:flex;
+padding:10px;
 `
+
 
 class PresetManager extends React.Component {
     constructor(props) {
@@ -24,12 +28,12 @@ class PresetManager extends React.Component {
     componentDidMount() {
         this.fetch()
         window.addEventListener("hashchange", this.loadFromUrl.bind(this), false);
-        
+
         this.loadFromUrl();
 
     }
-   
-    loadFromUrl(href){
+
+    loadFromUrl(href) {
         if (window.location.hash) {
             var hash = decodeURIComponent(window.location.hash.substring(1)); //Puts hash in variable, and removes the # character
             var loadState = JSON.parse(hash)
@@ -101,7 +105,7 @@ class PresetManager extends React.Component {
         var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
 
         console.log(queryString);
-        
+
         copyStringToClipboard(url + '#' + encodeURIComponent(string))
         alert('Copied to clipboard!')
     }
@@ -119,14 +123,25 @@ class PresetManager extends React.Component {
 
     }
 
+    renderButtons() {
+        let buttons = [];
+        for (let i = 0; i < 8; i++) {
+            buttons.push(<PresetButton preset={i} active={this.props.general.preset == i} />)
+        }
+
+        return buttons
+    }
+
 
 
     render() {
 
         const { props } = this
-
+        /* 
         return (
             <div className="PresetManager">
+                {this.props.general.preset}
+                {this.renderButtons()}
                 <input type="text" placeholder="Enter preset name" onChange={this.onNameChange.bind(this)} value={this.state.presetName} />
                 <button onClick={this.onSave.bind(this)}>SAVE</button>
                 <button onClick={() => { this.loadPreset(defaultState) }}>DEFAULT</button>
@@ -141,6 +156,12 @@ class PresetManager extends React.Component {
                 <button onClick={this.onShare.bind(this)}>SHARE PATCH</button>
 
             </div>
+        );*/
+
+        return (
+            <Container >
+                {this.renderButtons()}
+            </Container>
         );
     }
 

@@ -6,6 +6,5 @@ export default  styled.div`
  text-align:center;
  text-transform:uppercase;
  font-size:12px;
- font-weight:bold;
- letter-spacing:1px;
+ letter-spacing:1.8px;
 `;

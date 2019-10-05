@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {  transform } from "framer-motion"
 import Label from './Label'
 
-const knobWidth = 40;
+const knobWidth = 34;
+const knobHeight = 48;
 const Container = styled.div`
 display:flex;
 flex-direction:column;
@@ -35,8 +36,8 @@ justify-content:space-between;
 
 const Background = styled.div`
 position:absolute;
-top:30px;
-bottom:-30px;
+top:${knobHeight/2}px;
+bottom:-${knobHeight/2}px;
 display:flex;
 width:100%;
 align-items:center;
@@ -47,7 +48,7 @@ justify-content:center;
 const Tick = styled.div`
   background-color:white;
   height:1px;
-  width:${props => props.size === 'big' ? 24 : 18}px;
+  width:${props => props.size === 'big' ? 18 : 12}px;
   opacity:.3;
 `
 const Inner = styled.div`
@@ -64,7 +65,7 @@ width:100%;
 
  position:relative;
  height: ${props => props.size}px;
-margin-bottom:60px;
+margin-bottom:${knobHeight}px;
   `;
 
 
@@ -83,7 +84,7 @@ padding:5px 0;
   flex-direction:column;
   align-items:center;
   justify-content: space-around;
-  height:60px;
+  height:${knobHeight}px;
   width:${knobWidth}px  ;
   background-image: linear-gradient(180deg, #1C1C1C 0%, #4D4D4D 99%);
   box-shadow: 0 5px 3px 0 rgba(0,0,0,0.19), 0 8px 7px 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(0,0,0,0.50), inset 0 1px 0 0 rgba(255,255,255,0.16);
@@ -190,7 +191,6 @@ class FaderControl extends React.Component {
     /* map va;l sto size: transform(this.props.value, [this.props.min, this.props.max],[40,200])*/
     return (
       <Container>
-        <Label>{this.props.label}</Label>
         <Outer size={this.props.size}>
           <Inner>
             <Background>
@@ -223,7 +223,7 @@ FaderControl.defaultProps = {
   param: 'gain',
   unit: '',
   moduleIndex: false,
-  size: 260
+  size: 220
 }
 
 const mapDispatchToProps = (dispatch) => {

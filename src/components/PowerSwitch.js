@@ -4,8 +4,21 @@ import { bindActionCreators } from 'redux';
 import { setPower } from '../actions/actions.js';
 
 import { connect } from 'react-redux';
-import Label from './Label'
 
+
+
+
+const Lamp = styled.div`
+   height:8px;
+   width:8px;
+   border-radius:100%;
+
+   background: ${props => props.active ? '#40EC00' : '#434343'};
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.50) 0%, rgba(255,255,255,0.02) 100%);
+    box-shadow: ${props => props.active ? '0 -1px 0 0 rgba(0,0,0,0.08), 0 1px 0 0 rgba(255,255,255,0.08), 0 0 10px 0 #40EC00, inset 0 -2px 4px 0 rgba(21,76,9,0.50), inset 0 2px 4px 0 rgba(212,255,170,0.50)' : ' 0 -1px 0 0 rgba(0,0,0,0.08), 0 1px 0 0 rgba(255,255,255,0.08), 0 0 10px 0 rgba(64,236,0,0.00), inset 0 -2px 4px 0 rgba(0,0,0,0.42), inset 0 2px 4px 0 rgba(51,51,51,0.50)'};
+
+    transition: all .1s;
+`
 
 
 const Container = styled.div`
@@ -13,6 +26,9 @@ const Container = styled.div`
     margin-bottom:20px;
     flex-direction:column;
     align-items:center;
+    flex:1;
+    justify-content:space-around;
+
 `
 const Track = styled.div`
     box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.50), inset 0 -1px 0 0 rgba(255,255,255,0.16);
@@ -22,8 +38,6 @@ const Track = styled.div`
     overflow:auto;
     cursor:pointer;
     transition: all .2s;
-    margin-top:10px;
-    margin-bottom:30px;
 `
 
 const Knob = styled.div`
@@ -48,6 +62,8 @@ class PowerSwitch extends React.Component {
     toggle() {
 
         const { value } = this.props;
+        const audio = new Audio('/sounds/switch.mp3');
+        audio.play()
         this.props.setPower(!value)
 
     }
@@ -55,12 +71,12 @@ class PowerSwitch extends React.Component {
         const { value } = this.props
         return (
             <Container >
-                <Label style={{textAlign:'left'}}>Power</Label>
-                <Track style={{background: value ? '#aaa':'#111'}} onClick={this.toggle.bind(this)} active={value}>
-                    <Knob style={{marginLeft: value ? 26:2}}></Knob></Track>
+                <Lamp active={value}></Lamp>
+                <Track style={{ background: value ? '#aaa' : '#111' }} onClick={this.toggle.bind(this)} active={value}>
+                    <Knob style={{ marginLeft: value ? 26 : 2 }}></Knob></Track>
             </Container>
         );
-    }   
+    }
 
 }
 
