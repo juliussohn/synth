@@ -9,14 +9,15 @@ import Label from './Label'
 
 const Container = styled.div`
 position:relative;
-margin-bottom:20px;
+margin-top:20px;
 `;
 
 const Inner = styled.div`
- padding:15px;
+ padding:0 15px;
  display:flex;
  align-items:center;
  justify-content:center;
+ margin-bottom:8px;
 `;
 
 
@@ -38,8 +39,8 @@ const KnobBase = styled.div`
 
 const Pointer = styled.div`
   background-image: linear-gradient(180deg, #1C1C1C 0%, #4D4D4D 99%);
-  height:15px;
-  width:15px;
+  height:10px;
+  width:10px;
   border-radius:100%;
   margin:10px;
 `;
@@ -58,8 +59,10 @@ const Value = styled(motion.div)`
   position:absolute;
   margin-left:50%;
   width:auto;
-  white-space:nowrap
+  white-space:nowrap;
 z-index:999;
+pointer-events:none;
+
 `;
 
 const ValueVariants = {
@@ -131,7 +134,6 @@ class KnobControl extends React.Component {
 
 
     let rotation = minDeg + ((value - min) * scale);
-    console.log('rotation', rotation)
 
     return rotation
   }
@@ -239,7 +241,6 @@ class KnobControl extends React.Component {
     /* map va;l sto size: transform(this.props.value, [this.props.min, this.props.max],[40,200])*/
     return (
       <Container>
-        <Label>{this.props.label}</Label>
         <Inner>
           <KnobBase size={this.props.size} onDoubleClick={this.onDoubleClick.bind(this)} onMouseDown={this.onMouseDown.bind(this)} >
             <KnobInner style={{ transform: `rotate(${this.getRotation(this.props.value)}deg)` }}>
@@ -247,6 +248,8 @@ class KnobControl extends React.Component {
             </KnobInner>
           </KnobBase>
         </Inner>
+        <Label>{this.props.label}</Label>
+
         <Value
           initial="hidden"
           animate={this.state.dragging ? 'visible' : 'hidden'}
@@ -276,7 +279,7 @@ KnobControl.defaultProps = {
   param: 'pitch',
   unit: '',
   moduleIndex: false,
-  size: 80,
+  size: 60,
   snap: false,
   log: false,
   degreePerPixel: 1.5

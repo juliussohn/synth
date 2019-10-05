@@ -1,16 +1,27 @@
 import React from 'react';
+import styled from 'styled-components';
 import AudioEngine from './components/AudioEngine'
+import Base from './components/Base'
 
 
-import Controls from './components/Controls'
+
+const AppContainer = styled.div`
+ display:flex;
+align-items:center;
+ justify-content:center;
+ min-height: 800px;
+ height: 100vh;
+ min-width:1200px;
+`;
+
+
 function App() {
   return (
-  
 
-      <div className="App" >
+    <AppContainer>
       <AudioEngine></AudioEngine>
-        <Controls></Controls>
-      </div>
+      <Base></Base>
+    </AppContainer>
   );
 }
 

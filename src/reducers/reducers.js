@@ -9,7 +9,8 @@ export let defaultState = {
     },
     general: {
         octave: 0,
-        glide: 0
+        glide: 0,
+        preset:0
     },
     vco: [
         {
@@ -112,6 +113,7 @@ const reducers = (state = defaultState, action) => {
                 }
             }
 
+            /*
         case 'SET_PRESET':
             return {
                 ...defaultState,
@@ -121,7 +123,15 @@ const reducers = (state = defaultState, action) => {
                     active:state.power.active
                 }
             }
-
+             */
+            case 'SET_PRESET':
+                return {
+                    ...state,
+                    general: {
+                        ...state.general,
+                        preset:action.preset
+                    }
+                }
         case 'PRESS_NOTE':
             console.log(action)
             return {
