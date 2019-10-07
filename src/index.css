@@ -16,23 +16,24 @@ body {
   cursor: default;
   color:white;
   background-color: #313131;
+  position: relative;
+  height: 100%;
 
-}
+} 
+
+
+
 *{
   box-sizing: border-box;
 }
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-h2{
-  letter-spacing:1px;
-font-size:20px;
-}
 
-hr{
-  background: grey;
-  height:1px;
-  outline:none;
-  border:none;
+
+
+
+html, body{
+  padding: 0;
+  margin: 0;
+}
+html, #root{
+  height: 100%;
 }

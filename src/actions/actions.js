@@ -15,6 +15,14 @@ export const setPower = (active) =>(
     }
 )
 
+export const loadPreset = (preset) =>(
+    {
+        type: 'LOAD_PRESET',
+        preset
+    }
+)
+
+
 export const setPreset = (preset) =>(
     {
         type: 'SET_PRESET',

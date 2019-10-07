@@ -9,9 +9,8 @@ const AppContainer = styled.div`
  display:flex;
 align-items:center;
  justify-content:center;
- min-height: 800px;
- height: 100vh;
- min-width:1200px;
+ height: 100%;
+ width:100%;
 `;
 
 

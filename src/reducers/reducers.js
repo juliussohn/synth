@@ -113,8 +113,8 @@ const reducers = (state = defaultState, action) => {
                 }
             }
 
-            /*
-        case 'SET_PRESET':
+            
+        case 'LOAD_PRESET':
             return {
                 ...defaultState,
                 ...state,
@@ -123,8 +123,8 @@ const reducers = (state = defaultState, action) => {
                     active:state.power.active
                 }
             }
-             */
-            case 'SET_PRESET':
+             
+        case 'SET_PRESET':
                 return {
                     ...state,
                     general: {
@@ -132,6 +132,7 @@ const reducers = (state = defaultState, action) => {
                         preset:action.preset
                     }
                 }
+                
         case 'PRESS_NOTE':
             console.log(action)
             return {
