@@ -110,10 +110,10 @@ class Controls extends React.Component {
                         <ModuleLabel>AMP</ModuleLabel>
                         <ModuleContent>
                             <Row>
-                                <KnobControl label={"Attack"} unit={"s"} module={'envelope'} param={'attack'} min={0} max={2} value={props.envelope.attack}></KnobControl>
-                                <KnobControl label={"Decay"} unit={"s"} module={'envelope'} param={'decay'} min={0} max={2} value={props.envelope.decay}></KnobControl>
+                                <KnobControl label={"Attack"}  unit={"s"} module={'envelope'} param={'attack'}  log={true} min={0.001} max={10} value={props.envelope.attack}></KnobControl>
+                                <KnobControl label={"Decay"} unit={"s"} module={'envelope'} param={'decay'} log={true} min={0.001} max={10} value={props.envelope.decay}></KnobControl>
                                 <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
-                                <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} min={0} max={2} value={props.envelope.release}></KnobControl>
+                                <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} log={true} min={0.001} max={10}value={props.envelope.release}></KnobControl>
                             </Row>
                         </ModuleContent>
                     </Module>
@@ -128,10 +128,10 @@ class Controls extends React.Component {
 
                             </Row>
                             <Row>
-                                <KnobControl label={"Attack"} unit={"s"} module={'filterEnvelope'} param={'attack'} min={0} max={2} value={props.filterEnvelope.attack}></KnobControl>
-                                <KnobControl label={"Decay"} unit={"s"} module={'filterEnvelope'} param={'decay'} min={0} max={2} value={props.filterEnvelope.decay}></KnobControl>
+                                <KnobControl label={"Attack"} unit={"s"} module={'filterEnvelope'} param={'attack'} log={true} min={0.001} max={10} value={props.filterEnvelope.attack}></KnobControl>
+                                <KnobControl label={"Decay"} unit={"s"} module={'filterEnvelope'} param={'decay'} log={true} min={0.001} max={10} value={props.filterEnvelope.decay}></KnobControl>
                                 <KnobControl label={"Sustain"} unit={"%"} module={'filterEnvelope'} param={'sustain'} min={0} max={100} value={props.filterEnvelope.sustain}></KnobControl>
-                                <KnobControl label={"Release"} unit={"s"} module={'filterEnvelope'} param={'release'} min={0} max={2} value={props.filterEnvelope.release}></KnobControl>
+                                <KnobControl label={"Release"} unit={"s"} module={'filterEnvelope'} param={'release'} log={true} min={0.001} max={10}  value={props.filterEnvelope.release}></KnobControl>
                             </Row>
                         </ModuleContent>
                     </Module>
