@@ -72,10 +72,9 @@ class PowerSwitch extends React.Component {
 
     handleClick() {
         if(this.props.active) return;
-        this.props.setPreset(this.props.preset)
         const audio = new Audio('/sounds/button.mp3');
-
         audio.play();
+        this.props.onClick()
 
     }
 

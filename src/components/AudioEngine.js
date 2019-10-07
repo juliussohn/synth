@@ -11,10 +11,6 @@ const transposeFrequencyByOctave = (frequency, octave) => {
     return frequency * Math.pow(2, octave)
 }
 
-
-
-
-
 const transposeFrequencyByCents = (frequency, cents) => {
     const freq = frequency * Math.pow(2, cents / 1200)
     return freq

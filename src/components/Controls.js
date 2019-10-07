@@ -52,9 +52,8 @@ const ModuleContent = styled.div`
 `
 const Module = styled.div`
  text-align:center;
- border-right:1px solid grey;
- border:1px solid;
- margin:10px;
+ border:.5px solid;
+ margin:8px;
  border-radius:6px;
  flex:${props => typeof props.flex !== 'undefined' ? props.flex : 1};
  display:flex;

@@ -7,6 +7,8 @@ import Controls from './Controls'
 
 const Container = styled.div`
 display:flex;
+width:1200px;
+height:800px;   
 
 `
 const Wood = styled.div`

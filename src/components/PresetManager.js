@@ -4,10 +4,11 @@ import { store } from '../store';
 import { defaultState } from '../reducers/reducers';
 import { savePreset, getPresets, clearPresets } from '../localStorage'
 import { bindActionCreators } from 'redux';
-import { setParam, setPreset } from '../actions/actions.js';
+import { setParam, setPreset, loadPreset } from '../actions/actions.js';
 import { connect } from 'react-redux';
 import { metaProperty } from '@babel/types';
 import PresetButton from '../components/PresetButton'
+import presets from '../presets'
 
 
 const Container = styled.div`
@@ -83,6 +84,8 @@ class PresetManager extends React.Component {
         const state = store.getState()
         delete state.state.keyboard
         delete state.state.sequencer
+        delete state.state.amp
+        delete state.state.meta
         //delete state.state.meta
         const string = JSON.stringify(state.state)
         function copyStringToClipboard(str) {
@@ -106,7 +109,8 @@ class PresetManager extends React.Component {
 
         console.log(queryString);
 
-        copyStringToClipboard(url + '#' + encodeURIComponent(string))
+       // copyStringToClipboard(url + '#' + encodeURIComponent(string))
+        copyStringToClipboard(string)
         alert('Copied to clipboard!')
     }
 
@@ -117,16 +121,17 @@ class PresetManager extends React.Component {
 
     }
 
-    loadPreset(preset) {
-        this.props.setPreset(preset)
-        this.setState({ presetName: preset.meta.presetName });
+    loadPreset(presetIndex) {
+        this.props.loadPreset(presets[presetIndex])
+        this.props.setPreset(presetIndex)
+       // this.setState({ presetName: preset.meta.presetName });
 
     }
 
     renderButtons() {
         let buttons = [];
         for (let i = 0; i < 8; i++) {
-            buttons.push(<PresetButton preset={i} active={this.props.general.preset == i} />)
+            buttons.push(<PresetButton  onClick={() => { this.loadPreset(i) }} preset={i} active={this.props.general.preset == i} />)
         }
 
         return buttons
@@ -153,7 +158,6 @@ class PresetManager extends React.Component {
                 </select>
                 <button onClick={this.onClear.bind(this)}>DELETE ALL</button>
                 <button onClick={this.onExport.bind(this)}>EXPORT ALL</button>
-                <button onClick={this.onShare.bind(this)}>SHARE PATCH</button>
 
             </div>
         );*/
@@ -161,6 +165,8 @@ class PresetManager extends React.Component {
         return (
             <Container >
                 {this.renderButtons()}
+                <button onClick={this.onShare.bind(this)}>SHARE PATCH</button>
+
             </Container>
         );
     }
@@ -173,7 +179,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ setParam, setPreset }, dispatch)
+    return bindActionCreators({ setParam, setPreset, loadPreset }, dispatch)
 }
 
 
