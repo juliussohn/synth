@@ -41,7 +41,7 @@ class AudioEngine extends React.Component {
         this.biquadFilter.type = "lowpass";
         this.biquadFilter.frequency.value = props.filter.frequency
         this.biquadFilter.gain.value = 0;
-        this.biquadFilter.Q.value = props.filter.resonance;
+        this.biquadFilter.Q.value = props.filter.resonance/4;
         this.compressor = this.audioCtx.createDynamicsCompressor();
 
         this.biquadFilter.connect(this.envelope);
@@ -376,7 +376,7 @@ class AudioEngine extends React.Component {
 
         if (nextProps.amp.gain !== this.props.amp.gain) this.gain.gain.setValueAtTime(nextProps.amp.gain, ctx.currentTime);
         if (nextProps.filter.frequency !== this.props.filter.frequency) this.biquadFilter.frequency.setValueAtTime(nextProps.filter.frequency, ctx.currentTime);
-        if (nextProps.filter.resonance !== this.props.filter.resonance) this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance, ctx.currentTime);
+        if (nextProps.filter.resonance !== this.props.filter.resonance) this.biquadFilter.Q.setValueAtTime(nextProps.filter.resonance/4, ctx.currentTime);
 
     }
 
