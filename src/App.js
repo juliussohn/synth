@@ -21,6 +21,8 @@ flex: 1;
 overflow:hidden;
 padding:50px;
 align-items:center;
+justify-content:center;
+
 display:flex;
 
 `
@@ -30,7 +32,6 @@ function App() {
   return (
 
     <AppContainer>
-       <Onboarding></Onboarding>
       <AudioEngine></AudioEngine>
       <SynthContainer>
         <Base></Base>
@@ -40,6 +41,7 @@ function App() {
   );
 }
   
+//       <Onboarding></Onboarding>
 
 
 
