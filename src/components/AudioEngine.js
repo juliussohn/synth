@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { tick, pressNote } from '../actions/actions.js';
+import { tick, pressNote ,updateOscilloscope,updateCurrentTime} from '../actions/actions.js';
 import { bindActionCreators } from 'redux';
 import { transform } from "framer-motion"
 import * as midi from "@tonaljs/midi";
@@ -42,15 +42,32 @@ class AudioEngine extends React.Component {
         this.biquadFilter.frequency.value = props.filter.frequency
         this.biquadFilter.gain.value = 0;
         this.biquadFilter.Q.value = props.filter.resonance/4;
+
         this.compressor = this.audioCtx.createDynamicsCompressor();
 
+        this.analyzer = this.audioCtx.createAnalyser();
+        this.analyzer.fftSize = props.oscilloscope.fftSize;
+        this.analyzerBufferLength = this.analyzer.frequencyBinCount;
+        var dataArray = new Float32Array( this.analyzer.fftSize);
+
+
+
         this.biquadFilter.connect(this.envelope);
-        this.envelope.connect(this.gain);
+        this.envelope.connect(this.analyzer);
+
+        this.analyzer.connect(this.gain)
 
         this.gain.connect(this.compressor);
         this.compressor.connect(this.audioCtx.destination)
 
         this.pressedNotes = [];
+
+        setInterval(()=>{
+            
+            this.analyzer.getFloatTimeDomainData(dataArray)
+            props.updateOscilloscope(dataArray, this.audioCtx.currentTime)
+            
+        },1000/60)
     }
 
     mapKeyboardToMidi(key) {
@@ -92,7 +109,7 @@ class AudioEngine extends React.Component {
         const note = midiMessage.data[1];
         const velocity = transform(midiMessage.data[2], [1, 127], [0, 1]);
         const noteName = midi.midiToNoteName(note)
-
+        
         switch (midiMessage.data[0]) {
             case 144:
                 this.playNote(noteName, velocity)
@@ -270,7 +287,6 @@ class AudioEngine extends React.Component {
         const startTime = ctx.currentTime
         const startFrequency = this.biquadFilter.frequency.value
 
-        console.log(startFrequency)
         this.envelope.gain.cancelScheduledValues(0);
         this.envelope.gain.setValueAtTime(this.envelope.gain.value, startTime)
 
@@ -298,26 +314,6 @@ class AudioEngine extends React.Component {
         const attackFrequency = Math.exp((filterEnvelope.intensity) * scale + minv);   //scale * filterEnvelope.intensity
         const sustainFrequency = Math.exp((filterEnvelope.intensity * (filterEnvelope.sustain / 100)) * scale + minv);
 
-        //  return
-
-
-        console.log('log', scale * filterEnvelope.intensity)
-
-
-
-        // const freq = frequency * Math.pow(2, cents / 1200)
-
-
-        // 0 -> 100 intensity
-        // 0 -> max
-
-
-        //transposeFrequencyByCents(filter.frequency, 5  * filterEnvelope.intensity )
-
-
-        console.log('frequ delta', deltaFrequency)
-        console.log('frequ sust', deltaFrequency)
-        console.log('frequ', filter.frequency, filter.frequency + attackFrequency)
 
         this.biquadFilter.frequency.exponentialRampToValueAtTime(attackFrequency, startTime + filterEnvelope.attack);
         this.biquadFilter.frequency.setValueAtTime(attackFrequency, startTime + filterEnvelope.attack);
@@ -394,7 +390,7 @@ const mapStateToProps = (state) => {
     }
 }
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ tick, pressNote }, dispatch)
+    return bindActionCreators({ tick, pressNote, updateOscilloscope,updateCurrentTime }, dispatch)
 }
 
 

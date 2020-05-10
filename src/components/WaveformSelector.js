@@ -65,22 +65,22 @@ padding:5px 10px ;
 
 const shapeSVG = {
     sine: <svg width="20px" height="11px" viewBox="0 0 20 11" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Artboard" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="round">
             <path d="M19,5.5 C19,7.985 16.985,10 14.5,10 C12.015,10 10,7.985 10,5.5 C10,3.015 7.985,1 5.5,1 C3.015,1 1,3.015 1,5.5" id="Stroke-1" stroke="#C6C6C6"></path>
         </g>
     </svg>,
     triangle: <svg width="20px" height="11px" viewBox="0 0 20 11" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g id="Artboard-Copy-36" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Artboard-Copy-36" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round">
             <polyline id="Path-4" stroke="#C6C6C6" points="1 10 10 1 19 10"></polyline>
         </g>
     </svg>,
     sawtooth: <svg width="20px" height="11px" viewBox="0 0 20 11" version="1.1" xmlns="http://www.w3.org/2000/svg" >
-        <g id="Artboard-Copy-38" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Artboard-Copy-38" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round">
             <polyline id="Path-7" stroke="#C6C6C6" points="1 10 19 1 19 10"></polyline>
         </g>
     </svg>,
     square: <svg width="20px" height="11px" viewBox="0 0 20 11" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g id="Artboard-Copy-37" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Artboard-Copy-37" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round">
             <polyline id="Path-5-Copy" stroke="#C6C6C6" points="1 10 1 1 10 1 10 10 19 10"></polyline>
         </g>
     </svg>,
@@ -115,8 +115,8 @@ class WaveformSelector extends React.Component {
     }
 
     getShapes() {
-        return this.shapes.map(s =>
-            <ShapeImage onClick={e => { this.select(s) }}>{shapeSVG[s]}</ShapeImage>
+        return this.shapes.map((s,i) =>
+            <ShapeImage key={`${this.props.moduleIndex}shape_${i}`} onClick={e => { this.select(s) }}>{shapeSVG[s]}</ShapeImage>
         )
 
     }

@@ -43,3 +43,24 @@ export const tick = () =>(
         type: 'TICK',
     }
 )
+
+export const updateCurrentTime = (currentTime) =>(
+    {
+        type: 'UPDATE_CURRENT_TIME',
+        currentTime,
+    }
+)
+
+export const updateOscilloscope = (dataArray, currentTime) =>(
+    {
+        type: 'UPDATE_OSCILLOSCOPE',
+        dataArray,
+        currentTime
+    }
+)
+
+export const onboardingNextStep = () =>(
+    {
+        type: 'ONBOARDING_NEXT_STEP',
+    }
+)

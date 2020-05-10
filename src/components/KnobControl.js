@@ -9,7 +9,8 @@ import Label from './Label'
 
 const Container = styled.div`
 position:relative;
-margin-top:20px;
+margin:10px 0;
+
 `;
 
 const Inner = styled.div`
@@ -236,6 +237,7 @@ class KnobControl extends React.Component {
 
   }
 
+  
 
   render() {
     /* map va;l sto size: transform(this.props.value, [this.props.min, this.props.max],[40,200])*/
@@ -261,7 +263,7 @@ class KnobControl extends React.Component {
             delay: this.state.dragging ? 0 : 1
 
           }}>
-          {Math.round(this.props.value * 100) / 100} {this.props.unit}
+          {this.props.value.toFixed(this.props.decimals)} {this.props.unit}
         </Value>
 
       </Container>
@@ -280,6 +282,7 @@ KnobControl.defaultProps = {
   unit: '',
   moduleIndex: false,
   size: 60,
+  decimals:0,
   snap: false,
   log: false,
   degreePerPixel: 1.5

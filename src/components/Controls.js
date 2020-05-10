@@ -7,6 +7,7 @@ import KnobControl from '../components/KnobControl'
 import FaderControl from '../components/FaderControl'
 import WaveformSelector from '../components/WaveformSelector'
 import PresetManager from '../components/PresetManager'
+import Oscilloscope from '../components/Oscilloscope'
 
 
 const Row = styled.div`
@@ -75,11 +76,13 @@ class Controls extends React.Component {
                     <Module>
                         <ModuleLabel>Master</ModuleLabel>
                         <ModuleContent>
-                            <KnobControl label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} default={1} value={props.amp.gain}></KnobControl>
+                            <KnobControl decimals={2}   label={"Gain"} unit={""} module={'amp'} param={'gain'} min={0} max={1} default={1} value={props.amp.gain}></KnobControl>
                             <KnobControl snap={1} label={"Octave"} unit={""} module={'general'} param={'octave'} min={-3} max={3} default={0} value={props.general.octave}></KnobControl>
-                            <KnobControl label={"Glide"} unit={"s"} module={'general'} param={'glide'} min={0} max={3} default={0} value={props.general.glide}></KnobControl>
+                            <KnobControl label={"Glide"} decimals={2} unit={"s"} module={'general'} param={'glide'} min={0} max={3} default={0} value={props.general.glide}></KnobControl>
                         </ModuleContent>
                     </Module>
+                    <Oscilloscope></Oscilloscope>
+
                     <Module flex={.5} >
                         <ModuleLabel>POWER</ModuleLabel>
                         <ModuleContent>
@@ -91,8 +94,8 @@ class Controls extends React.Component {
 
                 {props.vco.map((vco, i) => {
                     return (
-                        <Column>
-                            <Module key={`vco_${i}`}>
+                        <Column key={`vco_${i}`}>
+                            <Module >
                                 <ModuleLabel key={`vco_title_${i}`}>VCO {i + 1}</ModuleLabel>
                                 <ModuleContent>
                                     <KnobControl key={`vco_semitones_${i}`} snap={1} label={"semitones"} module={'vco'} moduleIndex={i} param={'semitones'} min={-24} max={24} default={0} value={props.vco[i].semitones}></KnobControl>
@@ -106,35 +109,51 @@ class Controls extends React.Component {
                 })}
 
                 <Column>
-                    <Module flex={1}>
-                        <ModuleLabel>AMP</ModuleLabel>
-                        <ModuleContent>
-                            <Row>
-                                <KnobControl label={"Attack"}  unit={"s"} module={'envelope'} param={'attack'}  log={true} min={0.001} max={10} value={props.envelope.attack}></KnobControl>
-                                <KnobControl label={"Decay"} unit={"s"} module={'envelope'} param={'decay'} log={true} min={0.001} max={10} value={props.envelope.decay}></KnobControl>
-                                <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
-                                <KnobControl label={"Release"} unit={"s"} module={'envelope'} param={'release'} log={true} min={0.001} max={10}value={props.envelope.release}></KnobControl>
-                            </Row>
-                        </ModuleContent>
-                    </Module>
-
+                    
                     <Module flex={2}>
                         <ModuleLabel>FILTER</ModuleLabel>
                         <ModuleContent>
-                            <Row style={{marginBottom:20}}>
-                                <KnobControl label={"Cutoff"} log={true} unit={"Hz"} module={'filter'} size={120} param={'frequency'} min={100} max={20000} default={300} value={props.filter.frequency}></KnobControl>
+                            <Row >
+                                <KnobControl label={"Cutoff"} log={true} unit={"Hz"} module={'filter'} size={90} param={'frequency'} min={100} max={20000} default={300} value={props.filter.frequency}></KnobControl>
                                 <KnobControl label={"Resonance"} module={'filter'} param={'resonance'} min={0} max={100} default={0} value={props.filter.resonance}></KnobControl>
-                                <KnobControl label={"ENV AMOUNT"} unit={"%"} module={'filterEnvelope'} param={'intensity'} min={0} max={100} default={0} value={props.filterEnvelope.intensity}></KnobControl>
+                                <KnobControl label={"EG INT"} unit={"%"} module={'filterEnvelope'} param={'intensity'} min={-100} max={100} default={0} value={props.filterEnvelope.intensity}></KnobControl>
 
                             </Row>
+                            
+                        </ModuleContent>
+                    </Module>
+                    <Module flex={2}>
+                        <ModuleLabel>FILTER EG</ModuleLabel>
+                        <ModuleContent>
+                   
                             <Row>
-                                <KnobControl label={"Attack"} unit={"s"} module={'filterEnvelope'} param={'attack'} log={true} min={0.001} max={10} value={props.filterEnvelope.attack}></KnobControl>
-                                <KnobControl label={"Decay"} unit={"s"} module={'filterEnvelope'} param={'decay'} log={true} min={0.001} max={10} value={props.filterEnvelope.decay}></KnobControl>
+                                <KnobControl label={"Attack"} decimals={2} unit={"s"} module={'filterEnvelope'} param={'attack'} log={true} min={0.001} max={10} value={props.filterEnvelope.attack}></KnobControl>
+                                <KnobControl label={"Decay"} decimals={2} unit={"s"} module={'filterEnvelope'} param={'decay'} log={true} min={0.001} max={10} value={props.filterEnvelope.decay}></KnobControl>
                                 <KnobControl label={"Sustain"} unit={"%"} module={'filterEnvelope'} param={'sustain'} min={0} max={100} value={props.filterEnvelope.sustain}></KnobControl>
-                                <KnobControl label={"Release"} unit={"s"} module={'filterEnvelope'} param={'release'} log={true} min={0.001} max={10}  value={props.filterEnvelope.release}></KnobControl>
+                                <KnobControl label={"Release"} decimals={2} unit={"s"} module={'filterEnvelope'} param={'release'} log={true} min={0.001} max={10}  value={props.filterEnvelope.release}></KnobControl>
                             </Row>
                         </ModuleContent>
                     </Module>
+                    <Module flex={1}>
+                        <ModuleLabel>AMP EG</ModuleLabel>
+                        <ModuleContent>
+                            <Row>
+                                <div>
+                                <KnobControl label={"Attack"} decimals={2}   unit={"s"} module={'envelope'} param={'attack'}  log={true} min={0.001} max={10} value={props.envelope.attack}></KnobControl>
+                                </div> 
+                                <div>
+                                <KnobControl label={"Decay"}  decimals={2} unit={"s"} module={'envelope'} param={'decay'} log={true} min={0.001} max={10} value={props.envelope.decay}></KnobControl>
+                                </div> 
+                                <div>
+                                <KnobControl label={"Sustain"} unit={"%"} module={'envelope'} param={'sustain'} min={0} max={100} value={props.envelope.sustain}></KnobControl>
+                                </div>
+                                <div>
+                                <KnobControl label={"Release"} decimals={2} unit={"s"} module={'envelope'} param={'release'} log={true} min={0.001} max={10}value={props.envelope.release}></KnobControl>
+                                </div> 
+                            </Row>
+                        </ModuleContent>
+                    </Module>
+
 
                     <Module style={{ flex: 'none' }}>
                         <PresetManager></PresetManager>

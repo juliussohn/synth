@@ -4,13 +4,22 @@ export let defaultState = {
     meta: {
         presetName: ""
     },
+    onboarding:{
+        finished:false,
+        currentStep:0
+    },
     power: {
         active: false
     },
     general: {
         octave: 0,
         glide: 0,
-        preset:0
+        preset:0,
+        currentTime:0
+    },
+    oscilloscope:{
+        dataArray:[],
+        fftSize:2048
     },
     vco: [
         {
@@ -76,6 +85,7 @@ export let defaultState = {
 }
 
 const reducers = (state = defaultState, action) => {
+    
     switch (action.type) {
         case 'SET_PARAM':
             if (action.moduleIndex === false) {
@@ -134,7 +144,6 @@ const reducers = (state = defaultState, action) => {
                 }
                 
         case 'PRESS_NOTE':
-            console.log(action)
             return {
                 ...state,
                 keyboard: {
@@ -153,6 +162,40 @@ const reducers = (state = defaultState, action) => {
                 sequencer: {
                     ...state.sequencer,
                     currentStep: state.sequencer.currentStep === state.sequencer.steps - 1 ? 0 : state.sequencer.currentStep + 1
+                }
+            }
+
+        case 'UPDATE_OSCILLOSCOPE':{
+            return {
+                ...state,
+                oscilloscope:{
+                    ...state.oscilloscope,
+                    dataArray: action.dataArray.map((e)=>e)
+                },
+                general:{
+                    ...state.general,
+                    currentTime: action.currentTime
+                }
+            }
+        }
+        case 'UPDATE_CURRENT_TIME':{
+            return {
+                ...state,
+                general:{
+                    ...state.general,
+                    currentTime: action.currentTime
+                }
+            }
+        }
+
+
+
+        case 'ONBOARDING_NEXT_STEP':
+            return {
+                ...state,
+                onboarding:{
+                    ...state.onboarding,
+                    currentStep: state.onboarding.currentStep + 1
                 }
             }
 

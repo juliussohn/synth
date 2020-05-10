@@ -1,3 +1,19 @@
+
+@font-face {
+  font-family: 'Syne Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Syne Regular'), url('/fonts/Syne-Regular.woff') format('woff');
+  }
+  
+@font-face {
+  font-family: 'Syne Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Syne Bold'), url('/fonts/Syne-Bold.woff') format('woff');
+  }
+  
+  
 body {
   margin: 0;
   padding:0;
@@ -27,6 +43,11 @@ body {
   box-sizing: border-box;
 }
 
+h1{
+  font-family:"Syne Bold";
+  font-size: 62px;
+margin:0;
+}
 
 
 

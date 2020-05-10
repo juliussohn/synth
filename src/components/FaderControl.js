@@ -13,7 +13,7 @@ const Container = styled.div`
 display:flex;
 flex-direction:column;
 align-items:center;
-margin-bottom:40px;
+margin: 20px 0 30px;
 `;
 
 const Track = styled.div`

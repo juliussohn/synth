@@ -39,7 +39,9 @@ class PresetManager extends React.Component {
             var hash = decodeURIComponent(window.location.hash.substring(1)); //Puts hash in variable, and removes the # character
             var loadState = JSON.parse(hash)
             if (loadState) {
-                this.loadPreset(loadState);
+                console.log(loadState);
+                
+                this.props.loadPreset(loadState);
             }
         }
         window.dispatchEvent(new Event('popstate'));
@@ -79,15 +81,14 @@ class PresetManager extends React.Component {
     }
 
     onShare() {
-        const url = 'https://tender-roentgen-251c59.netlify.com'
-        //const url = 'http://localhost:3000'
+        //const url = 'https://tender-roentgen-251c59.netlify.com'
+        const url = 'http://localhost:3000'
         const state = store.getState()
-        delete state.state.keyboard
-        delete state.state.sequencer
-        delete state.state.amp
-        delete state.state.meta
+        const {power, keyboard, sequencer, amp, meta,oscilloscope, ...patch} = state.state
+     
+
         //delete state.state.meta
-        const string = JSON.stringify(state.state)
+        const string = JSON.stringify(patch)
         function copyStringToClipboard(str) {
             // Create new element
             var el = document.createElement('textarea');
@@ -105,13 +106,13 @@ class PresetManager extends React.Component {
             document.body.removeChild(el);
         }
 
-        var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
+       var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
 
-        console.log(queryString);
+      //  console.log(queryString);
 
-       // copyStringToClipboard(url + '#' + encodeURIComponent(string))
-        copyStringToClipboard(string)
-        alert('Copied to clipboard!')
+       copyStringToClipboard(url + '#' + encodeURIComponent(string))
+       // copyStringToClipboard(string)
+       alert('Copied to clipboard!')
     }
 
     fetch() {
@@ -131,7 +132,7 @@ class PresetManager extends React.Component {
     renderButtons() {
         let buttons = [];
         for (let i = 0; i < 8; i++) {
-            buttons.push(<PresetButton  onClick={() => { this.loadPreset(i) }} preset={i} active={this.props.general.preset == i} />)
+            buttons.push(<PresetButton key={`button_${i}`}  onClick={() => { this.loadPreset(i) }} preset={i} active={this.props.general.preset == i} />)
         }
 
         return buttons
