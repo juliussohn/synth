@@ -6,7 +6,8 @@ export let defaultState = {
     },
     onboarding:{
         finished:false,
-        currentStep:0
+        currentStep:0,
+        animating:false
     },
     power: {
         active: false
@@ -190,12 +191,37 @@ const reducers = (state = defaultState, action) => {
 
 
 
+        case 'ONBOARDING_ANIMATION_COMPLETE': {
+            return {
+                ...state,
+                onboarding:{
+                    ...state.onboarding,
+                    animating: false
+                }
+            }
+        }
+
+        
+        case 'ONBOARDING_FINISH':
+            return {
+                ...state,
+                onboarding:{
+                    ...state.onboarding,
+                    finished: true,
+                },
+                power:{
+                    ...state.power,
+                    active:true
+                }
+            }
+
         case 'ONBOARDING_NEXT_STEP':
             return {
                 ...state,
                 onboarding:{
                     ...state.onboarding,
-                    currentStep: state.onboarding.currentStep + 1
+                    animating: true,
+                    currentStep: state.onboarding.currentStep + 1,
                 }
             }
 

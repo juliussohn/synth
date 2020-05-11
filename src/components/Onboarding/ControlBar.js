@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { onboardingNextStep } from '../../actions/actions.js';
+import { onboardingNextStep, onboardingFinish } from '../../actions/actions.js';
 import { motion, Infinity } from "framer-motion"
 
 const Container = styled.div`
@@ -183,6 +183,7 @@ class ControlBar extends React.Component {
       animating: false
     }
     this.totalSteps = 4
+    this.onPressNext = this.onPressNext.bind(this)
 
   }
   renderCounter() {
@@ -215,14 +216,20 @@ class ControlBar extends React.Component {
     </CounterContainer>
   }
 
-  renderNextButton() {
-
+  onPressNext() {
+    const { currentStep, onboardingNextStep, onboardingFinish } = this.props;
+    if (currentStep < 2) {
+      onboardingNextStep()
+    } else {
+      onboardingFinish()
+    }
   }
+
   render() {
     const { onboardingNextStep } = this.props
     return <Container>{this.renderCounter()}
 
-      <ArrowButton onClick={this.props.onboardingNextStep}></ArrowButton></Container>
+      <ArrowButton onClick={this.onPressNext}></ArrowButton></Container>
   }
   componentDidUpdate(prevProps) {
 
@@ -241,7 +248,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ onboardingNextStep }, dispatch)
+  return bindActionCreators({ onboardingNextStep, onboardingFinish }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ControlBar);
 

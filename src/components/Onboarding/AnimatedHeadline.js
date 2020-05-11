@@ -2,11 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useAnimation } from "framer-motion"
 
+
+
+const lineHeight = 24;
+const lineSpacing = 7;
+const animationOffset = 0.07;
+
+
 const Container = styled.div`
 overflow:hidden;
 position:relative;
-
 `;
+
 const Block = styled(motion.div)`
 background:white;
 position:absolute;

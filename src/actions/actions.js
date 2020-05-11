@@ -59,6 +59,22 @@ export const updateOscilloscope = (dataArray, currentTime) =>(
     }
 )
 
+
+
+export const onboardingAnimationComplete = () =>(
+    {
+        type: 'ONBOARDING_ANIMATION_COMPLETE',
+    }
+)
+
+
+export const onboardingFinish = () =>(
+    {
+        type: 'ONBOARDING_FINISH',
+    }
+)
+
+
 export const onboardingNextStep = () =>(
     {
         type: 'ONBOARDING_NEXT_STEP',
