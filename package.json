@@ -10,6 +10,7 @@
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.1",
     "react-scripts": "3.1.2",
+    "standardized-audio-context": "^24.1.14",
     "styled-components": "^4.4.0",
     "tonal": "^2.2.2"
   },

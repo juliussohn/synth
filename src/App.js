@@ -1,70 +1,153 @@
-import React from 'react';
-import styled from 'styled-components';
-import AudioEngine from './components/AudioEngine'
-import Base from './components/Base'
-import Onboarding from './components/Onboarding/Onboarding'
-import { motion } from "framer-motion"
-import { connect } from 'react-redux';
-
+import React from "react";
+import styled from "styled-components";
+import AudioEngine from "./components/AudioEngine";
+import Base from "./components/Base";
+import Onboarding from "./components/Onboarding/Onboarding";
+import { motion } from "framer-motion";
+import { connect } from "react-redux";
+import { useState, useEffect } from "react";
+import AnimatedText from "./components/Onboarding/AnimatedText";
 
 const AppContainer = styled.div`
-align-items:center;
- /*justify-content:center;*/
- height: 100vh;
- width:100vw;
- align-items: stretch;
- overflow:hidden;
-
+	align-items: center;
+	/*justify-content:center;*/
+	height: ${(props) => props.height}px;
+	width: 100vw;
+	align-items: stretch;
+	overflow: hidden;
 `;
 
 const SynthContainer = styled(motion.div)`
-width:100vw;
-overflow:hidden;
-padding:50px;
-align-items:center;
-justify-content:center;
-display:flex;
+	width: 100vw;
+	height: 100%;
+	overflow: hidden;
+	padding: 50px;
+	align-items: center;
+	justify-content: space-around;
+	display: flex;
+	flex-direction: column;
+	pointer-events: ${(props) => (props.clickable ? "auto" : "none")};
+`;
 
-`
+const SocialContainer = styled.div`
+	position: fixed;
+	top: 0%;
+	right: 0;
+`;
+const PhoneContainer = styled.div`
+	width: 80%;
+	padding: 20px;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+`;
+const Credits = styled.div`
+	text-transform: uppercase;
+	font-size: 12px;
+	opacity: 0.4;
+	letter-spacing: 2px;
+	position: absolute;
+	bottom: 20px;
+	a {
+		color: white;
+		text-decoration: none;
+		display: inline-block;
+		border-bottom: 1px dashed;
+	}
+`;
+
 const variants = {
-  onboarding: { x: `45%` },
-  default: { x: `0%` },
-}
+	onboarding: { x: `45%` },
+	onboardingSmall: { x: `100%` },
+	default: { x: `0%` },
+};
 
 function App({ finished }) {
-  return (
+	const size = useWindowSize();
 
-    <AppContainer>
-      <AudioEngine></AudioEngine>
-      <Onboarding></Onboarding>
-      <SynthContainer 
-      variants={variants} 
-      initial={finished ? `default` : `onboarding`} 
-      animate={finished ? `default` : `onboarding`}
-      transition={{
-        type: "spring", stiffness: 60, damping:22
-     }}>
-        <Base></Base>
-      </SynthContainer>
-
-    </AppContainer>
-  );
+	if (size.height < 600 || size.width < 900)
+		return (
+			<PhoneContainer>
+				{" "}
+				<AnimatedText headline="Oh, Heck!" show={true}>
+					This screen is to small to properly shred. Those knobs would be tiny.
+					How did you imagine this would work? Please open this site on a tablet
+					or desktop device.
+				</AnimatedText>
+			</PhoneContainer>
+		);
+	return (
+		<AppContainer height={size.height}>
+			<SocialContainer>Twitter</SocialContainer>
+			<AudioEngine></AudioEngine>
+			<Onboarding></Onboarding>
+			<SynthContainer
+				clickable={finished}
+				variants={variants}
+				initial={
+					finished
+						? `default`
+						: size.width <= 1024
+						? `onboardingSmall`
+						: `onboarding`
+				}
+				animate={
+					finished
+						? `default`
+						: size.width <= 1024
+						? `onboardingSmall`
+						: `onboarding`
+				}
+				transition={{
+					type: "spring",
+					stiffness: 60,
+					damping: 22,
+				}}
+			>
+				<Base></Base>
+				<Credits>
+					Made by{" "}
+					<a target="_black" href="https://twitter.com/juliussohn">
+						Julius Sohn
+					</a>
+				</Credits>
+			</SynthContainer>
+		</AppContainer>
+	);
 }
 
+function useWindowSize() {
+	const isClient = typeof window === "object";
 
+	function getSize() {
+		return {
+			width: isClient ? window.innerWidth : undefined,
+			height: isClient ? window.innerHeight : undefined,
+		};
+	}
 
+	const [windowSize, setWindowSize] = useState(getSize);
+
+	useEffect(() => {
+		if (!isClient) {
+			return false;
+		}
+
+		function handleResize() {
+			setWindowSize(getSize());
+		}
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []); // Empty array ensures that effect is only run on mount and unmount
+
+	return windowSize;
+}
 
 const mapStateToProps = (state) => {
-
-  return {
-    ...state.state.onboarding
-  }
-}
-
+	return {
+		...state.state.onboarding,
+	};
+};
 
 export default connect(mapStateToProps, null)(App);
-
-
-
-
-
