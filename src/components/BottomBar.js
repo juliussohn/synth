@@ -42,8 +42,9 @@ function BottomBar({ onboardingReset, show }) {
 		transition: { duration: 0.3 },
 	};
 
-	const share = () => {
+	async function share() {
 		const url = "https://tender-roentgen-251c59.netlify.com";
+
 		//const url = "http://localhost:3000";
 		const state = store.getState();
 		const {
@@ -57,31 +58,50 @@ function BottomBar({ onboardingReset, show }) {
 			...patch
 		} = state.state;
 
-		//delete state.state.meta
 		const string = JSON.stringify(patch);
 		function copyStringToClipboard(str) {
-			// Create new element
 			var el = document.createElement("textarea");
-			// Set value (string to be copied)
 			el.value = str;
-			// Set non-editable to avoid focus and move outside of view
 			el.setAttribute("readonly", "");
 			el.style = { position: "absolute", left: "-9999px" };
 			document.body.appendChild(el);
-			// Select text inside element
 			el.select();
-			// Copy text to clipboard
 			document.execCommand("copy");
-			// Remove temporary element
 			document.body.removeChild(el);
 		}
 
 		//var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
 		//  copyStringToClipboard(string)
 
-		copyStringToClipboard(url + "#" + encodeURIComponent(string));
-		alert("Copied to clipboard!");
-	};
+		const long_url = url + "#" + encodeURIComponent(string);
+		console.log(long_url);
+
+		const response = await fetch("https://api-ssl.bitly.com/v4/shorten", {
+			method: "POST",
+			headers: new Headers({
+				Authorization: "Bearer 0fd40510df1fb0a5d106d8c02e61eb92145390ca",
+				"Content-Type": "application/json",
+			}),
+			body: JSON.stringify({
+				long_url,
+			}),
+		})
+			.then((res) => res.json())
+			.then(
+				(result) => {
+					console.log(result.link);
+					copyStringToClipboard(result.link);
+					alert("Copied to clipboard!");
+				},
+				// Note: it's important to handle errors here
+				// instead of a catch() block so that we don't swallow
+				// exceptions from actual bugs in components.
+				(error) => {
+					alert("Something went wrong");
+				}
+			);
+	}
+
 	return (
 		<Container>
 			<AnimatePresence>
@@ -96,7 +116,7 @@ function BottomBar({ onboardingReset, show }) {
 						</a>
 					</Item>,
 					<Item {...animate}>
-						<a onClick={share}>Share Patch </a>
+						<a onClick={share}>Copy patch link </a>{" "}
 					</Item>,
 				]}
 			</AnimatePresence>

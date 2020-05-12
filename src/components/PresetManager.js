@@ -77,47 +77,6 @@ class PresetManager extends React.Component {
 		document.body.removeChild(element);
 	}
 
-	onShare() {
-		//const url = 'https://tender-roentgen-251c59.netlify.com'
-		const url = "http://localhost:3000";
-		const state = store.getState();
-		const {
-			power,
-			keyboard,
-			sequencer,
-			amp,
-			meta,
-			oscilloscope,
-			onboarding,
-			...patch
-		} = state.state;
-
-		//delete state.state.meta
-		const string = JSON.stringify(patch);
-		function copyStringToClipboard(str) {
-			// Create new element
-			var el = document.createElement("textarea");
-			// Set value (string to be copied)
-			el.value = str;
-			// Set non-editable to avoid focus and move outside of view
-			el.setAttribute("readonly", "");
-			el.style = { position: "absolute", left: "-9999px" };
-			document.body.appendChild(el);
-			// Select text inside element
-			el.select();
-			// Copy text to clipboard
-			document.execCommand("copy");
-			// Remove temporary element
-			document.body.removeChild(el);
-		}
-
-		//var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
-		//  copyStringToClipboard(string)
-
-		copyStringToClipboard(url + "#" + encodeURIComponent(string));
-		alert("Copied to clipboard!");
-	}
-
 	fetch() {
 		console.log(getPresets());
 		this.setState({ presets: getPresets() });
@@ -148,12 +107,7 @@ class PresetManager extends React.Component {
 	}
 
 	render() {
-		return (
-			<Container>
-				{this.renderButtons()}
-				<button onClick={this.onShare.bind(this)}>SHARE PATCH</button>
-			</Container>
-		);
+		return <Container>{this.renderButtons()}</Container>;
 	}
 }
 const mapStateToProps = (state) => {
