@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import AudioEngine from "./components/AudioEngine";
 import Base from "./components/Base";
+import BottomBar from "./components/BottomBar";
 import Onboarding from "./components/Onboarding/Onboarding";
 import { motion } from "framer-motion";
 import { connect } from "react-redux";
@@ -36,26 +37,12 @@ const SocialContainer = styled.div`
 `;
 const PhoneContainer = styled.div`
 	width: 80%;
+	max-width: 500px;
 	padding: 20px;
 	position: fixed;
 	top: 20px;
 	left: 20px;
 `;
-const Credits = styled.div`
-	text-transform: uppercase;
-	font-size: 12px;
-	opacity: 0.4;
-	letter-spacing: 2px;
-	position: absolute;
-	bottom: 20px;
-	a {
-		color: white;
-		text-decoration: none;
-		display: inline-block;
-		border-bottom: 1px dashed;
-	}
-`;
-
 const variants = {
 	onboarding: { x: `45%` },
 	onboardingSmall: { x: `100%` },
@@ -68,7 +55,6 @@ function App({ finished }) {
 	if (size.height < 600 || size.width < 900)
 		return (
 			<PhoneContainer>
-				{" "}
 				<AnimatedText headline="Oh, Heck!" show={true}>
 					This screen is to small to properly shred. Those knobs would be tiny.
 					How did you imagine this would work? Please open this site on a tablet
@@ -105,12 +91,7 @@ function App({ finished }) {
 				}}
 			>
 				<Base></Base>
-				<Credits>
-					Made by{" "}
-					<a target="_black" href="https://twitter.com/juliussohn">
-						Julius Sohn
-					</a>
-				</Credits>
+				<BottomBar show={finished} />
 			</SynthContainer>
 		</AppContainer>
 	);

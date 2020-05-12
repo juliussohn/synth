@@ -53,3 +53,6 @@ export const onboardingFinish = () => ({
 export const onboardingNextStep = () => ({
 	type: "ONBOARDING_NEXT_STEP",
 });
+export const onboardingReset = () => ({
+	type: "ONBOARDING_RESET",
+});

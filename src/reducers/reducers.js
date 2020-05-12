@@ -217,6 +217,16 @@ const reducers = (state = defaultState, action) => {
 					currentStep: state.onboarding.currentStep + 1,
 				},
 			};
+		case "ONBOARDING_RESET":
+			return {
+				...state,
+				onboarding: {
+					...state.onboarding,
+					animating: false,
+					currentStep: 0,
+					finished: false,
+				},
+			};
 
 		default:
 			return state;

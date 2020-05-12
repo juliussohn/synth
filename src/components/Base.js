@@ -7,6 +7,7 @@ const Container = styled.div`
 	display: flex;
 	width: 1200px;
 	height: 800px;
+	min-height: 800px;
 	@media (max-width: 1240px), (max-height: 850px) {
 		transform: scale(0.9);
 	}

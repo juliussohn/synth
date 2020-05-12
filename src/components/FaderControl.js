@@ -27,7 +27,7 @@ const Track = styled.div`
 
 const Scale = styled.div`
 	display: flex;
-	align-items: flex- ${(props) => props.align};
+	align-items: ${(props) => `flex-${props.align}`};
 	flex-direction: column;
 	height: 100%;
 	justify-content: space-between;
