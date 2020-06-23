@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AudioEngine from "./components/AudioEngine";
 import Base from "./components/Base";
 import BottomBar from "./components/BottomBar";
+import ShareModal from "./components/ShareModal";
 import Onboarding from "./components/Onboarding/Onboarding";
 import { motion } from "framer-motion";
 import { connect } from "react-redux";
@@ -64,7 +65,7 @@ function App({ finished }) {
 		);
 	return (
 		<AppContainer height={size.height}>
-			<SocialContainer>Twitter</SocialContainer>
+			<ShareModal></ShareModal>
 			<AudioEngine></AudioEngine>
 			<Onboarding></Onboarding>
 			<SynthContainer

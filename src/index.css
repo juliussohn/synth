@@ -43,6 +43,7 @@ h1 {
 	font-size: 62px;
 	margin: 0;
 }
+
 @media (max-height: 900px) {
 	h1 {
 		margin-bottom: 18px !important;

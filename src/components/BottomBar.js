@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { onboardingReset } from "../actions/actions.js";
+import { onboardingReset, sharePatch } from "../actions/actions.js";
 import { motion, AnimatePresence } from "framer-motion";
 import { store } from "../store";
 
@@ -35,7 +35,7 @@ const Container = styled.div`
 
 const Item = styled(motion.div)``;
 
-function BottomBar({ onboardingReset, show }) {
+function BottomBar({ onboardingReset, setPatchLink, show, sharePatch }) {
 	const animate = {
 		animate: { opacity: 1 },
 		exit: { opacity: 0 },
@@ -43,7 +43,7 @@ function BottomBar({ onboardingReset, show }) {
 	};
 
 	async function share() {
-		const url = "https://tender-roentgen-251c59.netlify.com";
+		const url = "https://subtract.one";
 
 		//const url = "http://localhost:3000";
 		const state = store.getState();
@@ -59,16 +59,8 @@ function BottomBar({ onboardingReset, show }) {
 		} = state.state;
 
 		const string = JSON.stringify(patch);
-		function copyStringToClipboard(str) {
-			var el = document.createElement("textarea");
-			el.value = str;
-			el.setAttribute("readonly", "");
-			el.style = { position: "absolute", left: "-9999px" };
-			document.body.appendChild(el);
-			el.select();
-			document.execCommand("copy");
-			document.body.removeChild(el);
-		}
+
+		const whatsthis = `0fd40510df1fb0a5d106d8c02e61eb92145390ca`;
 
 		//var queryString = Object.keys(state.state).map(key => key + '=' + state.state[key]).join('&');
 		//  copyStringToClipboard(string)
@@ -79,7 +71,7 @@ function BottomBar({ onboardingReset, show }) {
 		const response = await fetch("https://api-ssl.bitly.com/v4/shorten", {
 			method: "POST",
 			headers: new Headers({
-				Authorization: "Bearer 0fd40510df1fb0a5d106d8c02e61eb92145390ca",
+				Authorization: `Bearer ${whatsthis}`,
 				"Content-Type": "application/json",
 			}),
 			body: JSON.stringify({
@@ -90,8 +82,7 @@ function BottomBar({ onboardingReset, show }) {
 			.then(
 				(result) => {
 					console.log(result.link);
-					copyStringToClipboard(result.link);
-					alert("Copied to clipboard!");
+					sharePatch(result.link);
 				},
 				// Note: it's important to handle errors here
 				// instead of a catch() block so that we don't swallow
@@ -116,7 +107,7 @@ function BottomBar({ onboardingReset, show }) {
 						</a>
 					</Item>,
 					<Item {...animate}>
-						<a onClick={share}>Copy patch link </a>{" "}
+						<a onClick={share}>Share Patch </a>{" "}
 					</Item>,
 				]}
 			</AnimatePresence>
@@ -131,7 +122,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ onboardingReset }, dispatch);
+	return bindActionCreators({ onboardingReset, sharePatch }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomBar);

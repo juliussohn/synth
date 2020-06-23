@@ -56,3 +56,12 @@ export const onboardingNextStep = () => ({
 export const onboardingReset = () => ({
 	type: "ONBOARDING_RESET",
 });
+
+export const sharePatch = (patchLink) => ({
+	type: "SHARE_PATCH",
+	patchLink,
+});
+
+export const closeShareModal = () => ({
+	type: "CLOSE_SHARE_MODAL",
+});

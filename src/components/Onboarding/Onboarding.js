@@ -17,7 +17,7 @@ const Container = styled(motion.div)`
 	flex-direction: column;
 	z-index: 99;
 	display: flex;
-	@media (max-height: 900px) {
+	@media (max-height: 800px) {
 		padding: 60px;
 	}
 `;
@@ -38,8 +38,8 @@ function Onboarding({ finished, currentStep }) {
 				>
 					<ControlBar></ControlBar>
 					<div>
-						<AnimatedText headline="Hey there!" show={0 === currentStep}>
-							This is “NAME”, an anlaog inspired, substractive, monophonic
+						<AnimatedText headline="SUBTRACT ONE" show={0 === currentStep}>
+							This is Subtract One, an analog inspired, subtractive, monophonic
 							synthesizer, powered by 3 oscillators a filter and two enveloper
 							generators, controlling the amplitude and the filter. It’s
 							completely written in JavaScript, using the Web Audio API.

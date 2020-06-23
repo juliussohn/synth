@@ -5,11 +5,13 @@ export let defaultState = {
 	meta: {
 		presetName: "",
 		preset: 0,
+		patchLink: "",
 	},
 	onboarding: {
-		finished: getOnboardingState(),
+		finished: false, //getOnboardingState(),
 		currentStep: 0,
 		animating: false,
+		shareModal: false,
 	},
 	power: {
 		active: false,
@@ -202,10 +204,10 @@ const reducers = (state = defaultState, action) => {
 					...state.onboarding,
 					finished: true,
 				},
-				/*  power:{
-                    ...state.power,
-                    active:true
-                }*/
+				power: {
+					...state.power,
+					active: true,
+				},
 			};
 
 		case "ONBOARDING_NEXT_STEP":
@@ -225,6 +227,29 @@ const reducers = (state = defaultState, action) => {
 					animating: false,
 					currentStep: 0,
 					finished: false,
+				},
+			};
+
+		case "SHARE_PATCH":
+			return {
+				...state,
+				meta: {
+					...state.meta,
+					patchLink: action.patchLink,
+				},
+				onboarding: {
+					...state.onboarding,
+					shareModal: true,
+				},
+			};
+
+		case "CLOSE_SHARE_MODAL":
+			return {
+				...state,
+
+				onboarding: {
+					...state.onboarding,
+					shareModal: false,
 				},
 			};
 
