@@ -18,14 +18,24 @@ const Container = styled.div`
 	left: 20px;
 	right: 20px;
 	span {
-		opacity: 0.4;
+		opacity: 0.5;
 	}
-	a {
-		opacity: 0.4;
+	button {
+		opacity: 0.5;
 		color: white;
 		text-decoration: none;
 		display: inline-block;
+		border: none;
+		text-transform: uppercase;
+		font-size: 12px;
+		letter-spacing: 2px;
+
 		border-bottom: 1px dashed;
+		background: none;
+		outline: none;
+		display: inline;
+		padding: 0;
+
 		cursor: pointer;
 		&:hover {
 			opacity: 0.8;
@@ -68,7 +78,7 @@ function BottomBar({ onboardingReset, setPatchLink, show, sharePatch }) {
 		const long_url = url + "#" + encodeURIComponent(string);
 		console.log(long_url);
 
-		const response = await fetch("https://api-ssl.bitly.com/v4/shorten", {
+		await fetch("https://api-ssl.bitly.com/v4/shorten", {
 			method: "POST",
 			headers: new Headers({
 				Authorization: `Bearer ${whatsthis}`,
@@ -98,16 +108,16 @@ function BottomBar({ onboardingReset, setPatchLink, show, sharePatch }) {
 			<AnimatePresence>
 				{show && [
 					<Item {...animate}>
-						<a onClick={onboardingReset}>How to use </a>
+						<button onClick={onboardingReset}>How to use </button>
 					</Item>,
 					<Item {...animate}>
 						<span>Made by </span>
-						<a target="_black" href="https://twitter.com/juliussohn">
+						<button target="_black" href="https://twitter.com/juliussohn">
 							Julius Sohn
-						</a>
+						</button>
 					</Item>,
 					<Item {...animate}>
-						<a onClick={share}>Share Patch </a>{" "}
+						<button onClick={share}>Share Patch </button>{" "}
 					</Item>,
 				]}
 			</AnimatePresence>

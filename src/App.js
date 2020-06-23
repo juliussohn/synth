@@ -31,11 +31,6 @@ const SynthContainer = styled(motion.div)`
 	pointer-events: ${(props) => (props.clickable ? "auto" : "none")};
 `;
 
-const SocialContainer = styled.div`
-	position: fixed;
-	top: 0%;
-	right: 0;
-`;
 const PhoneContainer = styled.div`
 	width: 80%;
 	max-width: 500px;
@@ -121,7 +116,7 @@ function useWindowSize() {
 
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
-	}, []); // Empty array ensures that effect is only run on mount and unmount
+	}); // Empty array ensures that effect is only run on mount and unmount
 
 	return windowSize;
 }

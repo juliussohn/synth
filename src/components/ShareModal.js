@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { closeShareModal } from "../actions/actions.js";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Container = styled.div`
 	background-color: rgba(0, 0, 0, 0.3);
@@ -136,41 +135,39 @@ function BottomBar({ shareModal, patchLink, closeShareModal }) {
 	if (!shareModal) return null;
 	return (
 		<Container>
-			<AnimatePresence>
-				<Modal>
-					<Close onClick={closeShareModal}>
-						<img src="/images/x.svg" />
-					</Close>
-					<Header>
-						<div>
-							<Title>Share Patch</Title>
-						</div>
-						<Description>
-							When opening the link below, all settings will be preserved and
-							the synth will create the exact same sound.
-						</Description>
-					</Header>
+			<Modal>
+				<Close onClick={closeShareModal}>
+					<img alt="close" src="/images/x.svg" />
+				</Close>
+				<Header>
+					<div>
+						<Title>Share Patch</Title>
+					</div>
+					<Description>
+						When opening the link below, all settings will be preserved and the
+						synth will create the exact same sound.
+					</Description>
+				</Header>
 
-					<ShareOptions>
-						<Link>
-							<Input type="text" readonly value={patchLink} />
-							<CopyButton onClick={copyToClipBoard}>{copyLabel}</CopyButton>
-						</Link>
-						<SocialShare
-							target="_blank"
-							href={`https://twitter.com/home?status=${patchLink}`}
-						>
-							<img src="/images/twitter.svg" />
-						</SocialShare>
-						<SocialShare
-							target="_blank"
-							href={`https://www.facebook.com/sharer/sharer.php?u=${patchLink}`}
-						>
-							<img src="/images/facebook.svg" />
-						</SocialShare>
-					</ShareOptions>
-				</Modal>
-			</AnimatePresence>
+				<ShareOptions>
+					<Link>
+						<Input type="text" readonly value={patchLink} />
+						<CopyButton onClick={copyToClipBoard}>{copyLabel}</CopyButton>
+					</Link>
+					<SocialShare
+						target="_blank"
+						href={`https://twitter.com/home?status=${patchLink}`}
+					>
+						<img alt="Twitter" src="/images/twitter.svg" />
+					</SocialShare>
+					<SocialShare
+						target="_blank"
+						href={`https://www.facebook.com/sharer/sharer.php?u=${patchLink}`}
+					>
+						<img alt="Facebook" src="/images/facebook.svg" />
+					</SocialShare>
+				</ShareOptions>
+			</Modal>
 		</Container>
 	);
 }

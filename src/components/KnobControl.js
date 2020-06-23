@@ -202,7 +202,7 @@ class KnobControl extends React.Component {
 			newValue = Math.round(newValue);
 		}
 
-		if (newValue == this.props.value) return;
+		if (newValue === this.props.value) return;
 
 		if (newValue > max) newValue = max;
 		else if (newValue < min) {

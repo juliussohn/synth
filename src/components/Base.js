@@ -66,7 +66,7 @@ function Base() {
 			<Wood style={{ backgroundImage: "url(/images/wood-1.jpg)" }} />
 			<Panel>
 				<Header>
-					<img src="images/logo.svg" />
+					<img alt="Subtract one" src="images/logo.svg" />
 				</Header>
 
 				<Controls></Controls>
