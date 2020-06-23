@@ -8,7 +8,7 @@ export let defaultState = {
 		patchLink: "",
 	},
 	onboarding: {
-		finished: false, //getOnboardingState(),
+		finished: getOnboardingState(),
 		currentStep: 0,
 		animating: false,
 		shareModal: false,
