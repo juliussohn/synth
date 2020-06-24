@@ -59,6 +59,7 @@ const Input = styled.input`
 	color: white;
 	font-size: 20px;
 	outline: none;
+	margin-right: 0;
 	flex: 1;
 	width: auto;
 	display: block;
@@ -83,7 +84,7 @@ const Title = styled.div`
 
 const SocialShare = styled.a`
 	cursor: pointer;
-
+	flex-shrink: 0;
 	height: 58px;
 	width: 58px;
 	border-radius: 4px;
@@ -186,7 +187,7 @@ function BottomBar({ shareModal, patchLink, closeShareModal }) {
 						<SocialShare
 							target="_blank"
 							rel="noopener noreferrer"
-							href={`https://twitter.com/home?status=${patchLink}`}
+							href={`https://twitter.com/intent/tweet?url=${patchLink}`}
 						>
 							<img alt="Twitter" src="/images/twitter.svg" />
 						</SocialShare>
