@@ -269,59 +269,58 @@ const presets = [
 	}, // 6 - blue
 	{
 		meta: {
-			presetName: "Flo",
+			presetName: "WahWah",
 		},
-
 		general: {
-			octave: 0,
-			glide: 0.03214285714285684,
-
-			currentTime: 7.9760544217687075,
+			octave: -2,
+			glide: 0.13,
+			currentTime: 0,
 		},
 		vco: [
 			{
 				pitch: 0,
-				type: "triangle",
 				gain: 1,
 				octave: 0,
 				semitones: 0,
-				detune: 30.535714285714292,
+				detune: 0,
+				type: "sawtooth",
 			},
 			{
 				pitch: 0,
 				type: "triangle",
-				gain: 0.049999999999999996,
+				gain: 0.7227272727272727,
 				octave: 0,
-				semitones: 0,
-				detune: 1.6071428571428612,
+				semitones: 12,
+				detune: 0,
 			},
 			{
 				pitch: 0,
-				type: "triangle",
-				gain: 0.7272727272727273,
+				type: "square",
+				gain: 0,
 				octave: 0,
 				semitones: 0,
 				detune: 0,
 			},
 		],
 		envelope: {
-			attack: 0.001,
-			decay: 0.03736444769542071,
-			sustain: 79.64285714285714,
-			release: 0.7062687723113767,
+			attack: 0.16926666150378772,
+			decay: 6.520572293428623,
+			sustain: 100,
+			release: 0.25118864315095835,
 		},
 		filterEnvelope: {
-			attack: 0.001,
-			decay: 2.0619860095022235,
-			sustain: 66.78571428571429,
-			release: 0.0766803859385006,
-			intensity: 29.64285714285714,
+			sustain: 28,
+			intensity: 36.428571428571416,
+			attack: 0.5531681197617235,
+			decay: 7.56,
+			release: 0.12589254117941692,
 		},
 		filter: {
-			frequency: 8716.897438592056,
-			resonance: 0,
+			frequency: 213.40171133990876,
+			resonance: 95.71428571428572,
 		},
-	}, // 7 -teal
+	},
+	// 7 -teal
 	{
 		power: { active: true },
 		general: {

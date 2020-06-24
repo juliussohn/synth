@@ -39,7 +39,7 @@ const Wood = styled.div`
 `;
 const Header = styled.div`
 	margin-bottom: 5px;
-	padding-left: 5px;
+	padding-left: 8px;
 `;
 
 const Panel = styled.div`

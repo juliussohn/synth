@@ -132,11 +132,16 @@ function BottomBar({ shareModal, patchLink, closeShareModal }) {
 		setCopyLabel("Copied!");
 	}
 
+	function closeModal() {
+		closeShareModal();
+		setCopyLabel("Copy Link");
+	}
+
 	if (!shareModal) return null;
 	return (
 		<Container>
 			<Modal>
-				<Close onClick={closeShareModal}>
+				<Close onClick={closeModal}>
 					<img alt="close" src="/images/x.svg" />
 				</Close>
 				<Header>

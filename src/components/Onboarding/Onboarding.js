@@ -40,7 +40,7 @@ function Onboarding({ finished, currentStep }) {
 					<div>
 						<AnimatedText headline="SUBTRACT ONE" show={0 === currentStep}>
 							This is Subtract One, an analog inspired, subtractive, monophonic
-							synthesizer, powered by 3 oscillators a filter and two enveloper
+							synthesizer, powered by 3 oscillators, a filter, and two envelope
 							generators, controlling the amplitude and the filter. It’s
 							completely written in JavaScript, using the Web Audio API.
 						</AnimatedText>
@@ -70,8 +70,8 @@ function Onboarding({ finished, currentStep }) {
 							]}
 						>
 							Analog synthesizers offer an indefinite amount of different
-							sounds. You can create heavy bass sounds, bright bells, amospheric
-							pads and so much more.
+							sounds. You can create heavy bass sounds, bright bells,
+							atmospheric pads and so much more.
 						</AnimatedText>
 					</div>
 				</Container>
