@@ -13,10 +13,10 @@ const Container = styled.div`
 		transform: scale(0.9);
 	}
 	@media (max-width: 1140px), (max-height: 780px) {
-		transform: scale(0.85);
+		transform: scale(0.8);
 	}
 	@media (max-width: 1100px), (max-height: 700px) {
-		transform: scale(0.8);
+		transform: scale(0.75);
 	}
 `;
 const Wood = styled.div`

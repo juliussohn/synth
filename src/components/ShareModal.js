@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { closeShareModal } from "../actions/actions.js";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Container = styled.div`
+const Overlay = styled(motion.div)`
 	background-color: rgba(0, 0, 0, 0.3);
 	position: fixed;
 	top: 0;
@@ -17,13 +18,18 @@ const Container = styled.div`
 	z-index: 99;
 `;
 
-const Modal = styled.div`
+const Modal = styled(motion.div)`
 	background-color: #141414;
 	padding: 60px;
 	border-radius: 10px;
 	box-shadow: 0px 24px 44px rgba(0, 0, 0, 0.15);
 	position: relative;
 	width: 640px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	z-index: 999;
 `;
 const CopyButton = styled.button`
 	padding: 16px;
@@ -134,46 +140,67 @@ function BottomBar({ shareModal, patchLink, closeShareModal }) {
 
 	function closeModal() {
 		closeShareModal();
-		setCopyLabel("Copy Link");
 	}
 
-	if (!shareModal) return null;
 	return (
-		<Container>
-			<Modal>
-				<Close onClick={closeModal}>
-					<img alt="close" src="/images/x.svg" />
-				</Close>
-				<Header>
-					<div>
-						<Title>Share Patch</Title>
-					</div>
-					<Description>
-						When opening the link below, all settings will be preserved and the
-						synth will create the exact same sound.
-					</Description>
-				</Header>
+		<AnimatePresence>
+			{shareModal && [
+				<Overlay
+					key="overlay"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				></Overlay>,
+				<Modal
+					key="modal"
+					initial={{ y: `-35%`, x: `-50%`, opacity: 0 }}
+					animate={{ y: `-50%`, x: `-50%`, opacity: 1 }}
+					exit={{
+						y: `-35%`,
+						x: `-50%`,
+						opacity: 0,
+					}}
+					onAnimationComplete={() => {
+						setCopyLabel("Copy Link");
+					}}
+					transition={{ type: "spring", stiffness: 100, damping: 300 }}
+				>
+					<Close onClick={closeModal}>
+						<img alt="close" src="/images/x.svg" />
+					</Close>
+					<Header>
+						<div>
+							<Title>Share Patch</Title>
+						</div>
+						<Description>
+							When opening the link below, all settings will be preserved and
+							the synth will create the exact same sound.
+						</Description>
+					</Header>
 
-				<ShareOptions>
-					<Link>
-						<Input type="text" readonly value={patchLink} />
-						<CopyButton onClick={copyToClipBoard}>{copyLabel}</CopyButton>
-					</Link>
-					<SocialShare
-						target="_blank"
-						href={`https://twitter.com/home?status=${patchLink}`}
-					>
-						<img alt="Twitter" src="/images/twitter.svg" />
-					</SocialShare>
-					<SocialShare
-						target="_blank"
-						href={`https://www.facebook.com/sharer/sharer.php?u=${patchLink}`}
-					>
-						<img alt="Facebook" src="/images/facebook.svg" />
-					</SocialShare>
-				</ShareOptions>
-			</Modal>
-		</Container>
+					<ShareOptions>
+						<Link>
+							<Input type="text" readonly value={patchLink} />
+							<CopyButton onClick={copyToClipBoard}>{copyLabel}</CopyButton>
+						</Link>
+						<SocialShare
+							target="_blank"
+							rel="noopener noreferrer"
+							href={`https://twitter.com/home?status=${patchLink}`}
+						>
+							<img alt="Twitter" src="/images/twitter.svg" />
+						</SocialShare>
+						<SocialShare
+							target="_blank"
+							rel="noopener noreferrer"
+							href={`https://www.facebook.com/sharer/sharer.php?u=${patchLink}`}
+						>
+							<img alt="Facebook" src="/images/facebook.svg" />
+						</SocialShare>
+					</ShareOptions>
+				</Modal>,
+			]}
+		</AnimatePresence>
 	);
 }
 

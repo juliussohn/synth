@@ -20,7 +20,8 @@ const Container = styled.div`
 	span {
 		opacity: 0.5;
 	}
-	button {
+	button,
+	a {
 		opacity: 0.5;
 		color: white;
 		text-decoration: none;
@@ -112,9 +113,13 @@ function BottomBar({ onboardingReset, setPatchLink, show, sharePatch }) {
 					</Item>,
 					<Item {...animate}>
 						<span>Made by </span>
-						<button target="_black" href="https://twitter.com/juliussohn">
+						<a
+							target="_blank"
+							rel="noopener noreferrer"
+							href="https://twitter.com/juliussohn"
+						>
 							Julius Sohn
-						</button>
+						</a>
 					</Item>,
 					<Item {...animate}>
 						<button onClick={share}>Share Patch </button>{" "}

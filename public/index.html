@@ -52,16 +52,25 @@
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<div id="root"></div>
-		<!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  
+    <script>
+      var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+if (window.localStorage) {
+  ga('create', 'UA-170622255-1', {
+    'storage': 'none',
+    'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
+  });
+  ga(function(tracker) {
+    localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+  });
+}
+else {
+  ga('create', 'UA-170622255-1', 'auto');
+}
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+ga('send', 'pageview');
+    </script>
 	</body>
 </html>
 
